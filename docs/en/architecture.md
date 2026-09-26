@@ -9,3 +9,5 @@ No code in the application sends files to Telegram. The optional `publication-pl
 Audio tracks are inspected with FFprobe. FFmpeg uses audio stream copy (`-c:a copy`) and installs an output only after track, codec, duration, and full-read checks pass. No audio is re-encoded. The release build must bundle an audited FFmpeg/FFprobe pair and include its applicable notices.
 
 Copy and archive operations have a private SQLite journal, per-operation checksums, restart reconciliation, and a single-writer lock. Deleting originals is a separate opt-in action that requires an exact approved path list, a rechecked audio receipt, an unchanged source fingerprint, and confirmation that other selected container data was saved.
+
+Title suggestions use the pinned Qwen3-4B Q4_K_M file (2,497,280,256 bytes, SHA-256 recorded in `local_model.py`) and the llama.cpp CLI at the pinned commit. Internet access is used only for the first model download. Downloads resume through HTTP ranges and are installed only after size and checksum verification; inference runs as a local process and receives transcript text through a private temporary prompt file.
