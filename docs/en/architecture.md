@@ -13,3 +13,5 @@ Copy and archive operations have a private SQLite journal, per-operation checksu
 Title suggestions use the pinned Qwen3-4B Q4_K_M file (2,497,280,256 bytes, SHA-256 recorded in `local_model.py`) and the llama.cpp CLI at the pinned commit. Internet access is used only for the first model download. Downloads resume through HTTP ranges and are installed only after size and checksum verification; inference runs as a local process and receives transcript text through a private temporary input file.
 
 Subtitle analysis reads only the first five or ten minutes of SRT cues and removes display markup without changing the source. The local model proposes one short Russian title. Related file names are proposed only for an unambiguous same-stem group; language and quality variants remain in the output names. Applying a proposal requires an exact approval and touches prepared output files only.
+
+The app exports `publication-plan.json` version 1 for the sender. It contains ordered text messages and verified output files with relative paths, byte sizes, and SHA-256 values. Absolute paths and SRT contents are omitted, and an existing plan file is never overwritten.

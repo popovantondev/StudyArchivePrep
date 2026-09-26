@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/popovantondev/StudyArchivePrep/releases/download/schema/publication-plan-v1.schema.json",
+  "title": "Study Archive Prep publication plan v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "schema_version", "project_id", "revision", "items"],
+  "properties": {
+    "format": {"const": "study-archive-publication-plan"},
+    "schema_version": {"const": 1},
+    "project_id": {"type": "string", "format": "uuid"},
+    "revision": {"type": "integer", "minimum": 1},
+    "items": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "kind", "week", "date", "text"],
+            "properties": {
+              "id": {"type": "string", "format": "uuid"},
+              "kind": {"const": "text"},
+              "week": {"type": "integer", "minimum": 1},
+              "date": {"type": ["string", "null"], "format": "date"},
+              "text": {"type": "string", "minLength": 1}
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "kind", "week", "date", "path", "name", "size", "sha256"],
+            "properties": {
+              "id": {"type": "string", "format": "uuid"},
+              "kind": {"const": "file"},
+              "week": {"type": "integer", "minimum": 1},
+              "date": {"type": ["string", "null"], "format": "date"},
+              "path": {"type": "string", "minLength": 1},
+              "name": {"type": "string", "minLength": 1},
+              "size": {"type": "integer", "minimum": 0},
+              "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+            }
+          }
+        ]
+      }
+    }
+  }
+}
