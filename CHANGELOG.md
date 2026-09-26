@@ -5,6 +5,7 @@
 - Created the Study Archive Prep application shell and local project-memory workflow.
 - Added project persistence, conservative source scanning, an editable publication order, operation preflight, safe copy/ZIP processing, and lossless audio stream extraction.
 - Added resumable, checksum-pinned local Qwen model downloads and an offline llama.cpp CLI runner.
+- Added bounded 5/10-minute SRT excerpts, Russian title suggestions, variant-preserving output-name proposals, and exact-confirmation renames limited to prepared output files.
 
 ## 0.1.0 — initial development scaffold
 
