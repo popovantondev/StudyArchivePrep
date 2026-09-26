@@ -1,0 +1,297 @@
+"""Project setup window used as the first screen of Study Archive Prep."""
+from __future__ import annotations
+
+from pathlib import Path
+
+from PySide6.QtCore import QDate, Qt, QSettings
+from PySide6.QtGui import QFont
+from PySide6.QtWidgets import (
+    QComboBox,
+    QCheckBox,
+    QDateEdit,
+    QFileDialog,
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+    QListWidget,
+    QMainWindow,
+    QMessageBox,
+    QPushButton,
+    QSizePolicy,
+    QVBoxLayout,
+    QWidget,
+)
+
+from .i18n import LANGUAGES, LANGUAGE_LABELS, tr
+
+
+STYLE = """
+QMainWindow, QWidget#page { background: #eef2f9; color: #183451; }
+QFrame#card { background: #ffffff; border: 1px solid #dce5f1; border-radius: 18px; }
+QLabel#eyebrow { color: #3374c4; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+QLabel#headline { color: #183451; font-size: 29px; font-weight: 700; }
+QLabel#body, QLabel#muted { color: #687f9b; font-size: 13px; }
+QLabel#section { color: #1b3655; font-size: 15px; font-weight: 650; }
+QPushButton { color: #1d4775; background: #edf4fd; border: 1px solid #d5e3f5; border-radius: 10px; padding: 9px 13px; font-weight: 600; }
+QPushButton:hover { background: #e4eefb; border-color: #b7cdeb; }
+QPushButton:pressed { background: #dce9f8; }
+QPushButton#primary { color: white; background: #2e70bb; border: 0; padding: 11px 18px; }
+QPushButton#primary:hover { background: #245f9f; }
+QPushButton:disabled { color: #91a0b4; background: #f2f4f8; border-color: #e4e8ef; }
+QComboBox, QDateEdit { color: #183451; background: #fff; border: 1px solid #d7e2ef; border-radius: 9px; padding: 7px 10px; }
+QComboBox QAbstractItemView { background: #fff; selection-background-color: #e7f0fb; }
+QListWidget { color: #183451; background: #fbfcfe; border: 1px solid #e3e9f1; border-radius: 11px; padding: 5px; }
+QListWidget::item { padding: 8px 7px; border-radius: 6px; }
+QListWidget::item:selected { color: #183451; background: #e5effb; }
+"""
+
+
+class MainWindow(QMainWindow):
+    def __init__(self, language: str, settings: QSettings):
+        super().__init__()
+        self.settings = settings
+        self.language = language if language in LANGUAGES else "en"
+        self.source_paths: list[Path] = []
+        self.output_path: Path | None = None
+        self.setWindowTitle(tr("window_title", self.language))
+        self.resize(1060, 760)
+        self.setMinimumSize(820, 640)
+        self.setStyleSheet(STYLE)
+        self._build_ui()
+        self._restore_window()
+
+    def _text(self, key: str) -> str:
+        return tr(key, self.language)
+
+    def _build_ui(self) -> None:
+        page = QWidget()
+        page.setObjectName("page")
+        root = QVBoxLayout(page)
+        root.setContentsMargins(34, 24, 34, 28)
+        root.setSpacing(17)
+
+        top = QHBoxLayout()
+        top.setSpacing(8)
+        top.addStretch(1)
+        language_label = QLabel(self._text("language"))
+        language_label.setObjectName("muted")
+        top.addWidget(language_label)
+        self.language_picker = QComboBox()
+        for code in LANGUAGES:
+            self.language_picker.addItem(LANGUAGE_LABELS[code], code)
+        self.language_picker.setCurrentIndex(LANGUAGES.index(self.language))
+        self.language_picker.currentIndexChanged.connect(self._language_changed)
+        self.language_picker.setAccessibleName(self._text("language"))
+        top.addWidget(self.language_picker)
+        root.addLayout(top)
+
+        intro = QFrame()
+        intro.setObjectName("card")
+        intro_layout = QVBoxLayout(intro)
+        intro_layout.setContentsMargins(25, 22, 25, 21)
+        intro_layout.setSpacing(9)
+        self.eyebrow = QLabel()
+        self.eyebrow.setObjectName("eyebrow")
+        intro_layout.addWidget(self.eyebrow)
+        self.headline = QLabel()
+        self.headline.setObjectName("headline")
+        headline_font = QFont(self.headline.font())
+        headline_font.setWeight(QFont.Weight.Bold)
+        self.headline.setFont(headline_font)
+        intro_layout.addWidget(self.headline)
+        self.intro = QLabel()
+        self.intro.setObjectName("body")
+        self.intro.setWordWrap(True)
+        self.intro.setMaximumWidth(760)
+        intro_layout.addWidget(self.intro)
+        root.addWidget(intro)
+
+        content = QHBoxLayout()
+        content.setSpacing(16)
+        setup = QFrame()
+        setup.setObjectName("card")
+        setup_layout = QVBoxLayout(setup)
+        setup_layout.setContentsMargins(22, 20, 22, 22)
+        setup_layout.setSpacing(12)
+        self.setup_title = QLabel()
+        self.setup_title.setObjectName("section")
+        setup_layout.addWidget(self.setup_title)
+        self.setup_hint = QLabel()
+        self.setup_hint.setObjectName("muted")
+        self.setup_hint.setWordWrap(True)
+        setup_layout.addWidget(self.setup_hint)
+
+        sources_header = QHBoxLayout()
+        self.sources_label = QLabel()
+        self.sources_label.setObjectName("section")
+        sources_header.addWidget(self.sources_label)
+        sources_header.addStretch(1)
+        self.add_button = QPushButton()
+        self.add_button.clicked.connect(self._add_source)
+        sources_header.addWidget(self.add_button)
+        setup_layout.addLayout(sources_header)
+
+        self.sources_list = QListWidget()
+        self.sources_list.setMinimumHeight(128)
+        self.sources_list.setAccessibleName(self._text("sources_label"))
+        setup_layout.addWidget(self.sources_list, 1)
+        self.remove_button = QPushButton()
+        self.remove_button.clicked.connect(self._remove_source)
+        setup_layout.addWidget(self.remove_button, 0, Qt.AlignmentFlag.AlignLeft)
+
+        output_header = QHBoxLayout()
+        self.output_label = QLabel()
+        self.output_label.setObjectName("section")
+        output_header.addWidget(self.output_label)
+        output_header.addStretch(1)
+        self.output_button = QPushButton()
+        self.output_button.clicked.connect(self._choose_output)
+        output_header.addWidget(self.output_button)
+        setup_layout.addLayout(output_header)
+        self.output_value = QLabel()
+        self.output_value.setObjectName("muted")
+        self.output_value.setWordWrap(True)
+        self.output_value.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+        setup_layout.addWidget(self.output_value)
+
+        date_row = QHBoxLayout()
+        self.date_label = QLabel()
+        self.date_label.setObjectName("section")
+        date_row.addWidget(self.date_label)
+        self.start_date = QDateEdit(QDate.currentDate())
+        self.start_date.setCalendarPopup(True)
+        self.start_date.setDisplayFormat("yyyy-MM-dd")
+        self.start_date.setMinimumDate(QDate(2000, 1, 1))
+        self.start_date.setMaximumDate(QDate(2100, 12, 31))
+        self.start_date.setEnabled(False)
+        self.start_date.setAccessibleName(self._text("start_date"))
+        self.date_enabled = QCheckBox()
+        self.date_enabled.toggled.connect(self.start_date.setEnabled)
+        self.date_enabled.setAccessibleName(self._text("start_date"))
+        date_row.addWidget(self.date_enabled)
+        date_row.addWidget(self.start_date)
+        date_row.addStretch(1)
+        setup_layout.addLayout(date_row)
+
+        self.status = QLabel()
+        self.status.setObjectName("muted")
+        self.status.setWordWrap(True)
+        self.status.setMinimumHeight(40)
+        setup_layout.addWidget(self.status)
+        self.create_button = QPushButton()
+        self.create_button.setObjectName("primary")
+        self.create_button.clicked.connect(self._create_project)
+        self.create_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        setup_layout.addWidget(self.create_button, 0, Qt.AlignmentFlag.AlignRight)
+        content.addWidget(setup, 3)
+
+        steps = QFrame()
+        steps.setObjectName("card")
+        steps.setMaximumWidth(286)
+        steps_layout = QVBoxLayout(steps)
+        steps_layout.setContentsMargins(19, 20, 19, 20)
+        steps_layout.setSpacing(13)
+        self.steps_title = QLabel()
+        self.steps_title.setObjectName("section")
+        steps_layout.addWidget(self.steps_title)
+        self.steps_body = QLabel()
+        self.steps_body.setObjectName("muted")
+        self.steps_body.setWordWrap(True)
+        self.steps_body.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        steps_layout.addWidget(self.steps_body)
+        steps_layout.addStretch(1)
+        content.addWidget(steps, 1)
+        root.addLayout(content, 1)
+
+        self.setCentralWidget(page)
+        self._retranslate()
+
+    def _retranslate(self) -> None:
+        self.setWindowTitle(self._text("window_title"))
+        self.eyebrow.setText(self._text("eyebrow"))
+        self.headline.setText(self._text("headline"))
+        self.intro.setText(self._text("intro"))
+        self.setup_title.setText(self._text("setup_title"))
+        self.setup_hint.setText(self._text("setup_hint"))
+        self.sources_label.setText(self._text("sources_label"))
+        self.add_button.setText(self._text("add_source"))
+        self.remove_button.setText(self._text("remove_source"))
+        self.output_label.setText(self._text("output_label"))
+        self.output_button.setText(self._text("choose_output"))
+        self.date_label.setText(self._text("start_date"))
+        self.date_enabled.setText(self._text("set_start_date"))
+        self.create_button.setText(self._text("create_project"))
+        self.steps_title.setText(self._text("next_steps"))
+        self.steps_body.setText(self._text("next_steps_body"))
+        self._refresh_paths()
+
+    def _language_changed(self, _index: int) -> None:
+        language = self.language_picker.currentData()
+        if language not in LANGUAGES:
+            return
+        self.language = language
+        self.settings.setValue("language", language)
+        self._retranslate()
+
+    def _refresh_paths(self) -> None:
+        if not self.source_paths:
+            self.sources_list.clear()
+            self.sources_list.addItem(self._text("no_sources"))
+            self.sources_list.item(0).setFlags(Qt.ItemFlag.NoItemFlags)
+        else:
+            self.sources_list.clear()
+            for path in self.source_paths:
+                self.sources_list.addItem(str(path))
+        self.output_value.setText(str(self.output_path) if self.output_path else self._text("not_set"))
+
+    def _add_source(self) -> None:
+        selected = QFileDialog.getExistingDirectory(self, self._text("select_source"))
+        if not selected:
+            return
+        path = Path(selected).expanduser().resolve()
+        if path not in self.source_paths:
+            self.source_paths.append(path)
+            self.source_paths.sort(key=lambda item: str(item).casefold())
+        self._refresh_paths()
+
+    def _remove_source(self) -> None:
+        row = self.sources_list.currentRow()
+        if 0 <= row < len(self.source_paths):
+            self.source_paths.pop(row)
+            self._refresh_paths()
+
+    def _choose_output(self) -> None:
+        selected = QFileDialog.getExistingDirectory(self, self._text("select_destination"))
+        if selected:
+            self.output_path = Path(selected).expanduser().resolve()
+            self._refresh_paths()
+
+    def _create_project(self) -> None:
+        self.status.setStyleSheet("color: #687f9b;")
+        if not self.source_paths:
+            self._set_status(self._text("need_source"), error=True)
+            return
+        if self.output_path is None:
+            self._set_status(self._text("need_output"), error=True)
+            return
+        if not self.date_enabled.isChecked():
+            self._set_status(self._text("need_date"), error=True)
+            return
+        for source in self.source_paths:
+            if source == self.output_path or source in self.output_path.parents or self.output_path in source.parents:
+                self._set_status(self._text("source_output_overlap"), error=True)
+                return
+        self._set_status(self._text("project_ready"), error=False)
+
+    def _set_status(self, value: str, error: bool) -> None:
+        self.status.setText(value)
+        self.status.setStyleSheet("color: #a23b45;" if error else "color: #2c7757;")
+
+    def _restore_window(self) -> None:
+        geometry = self.settings.value("window_geometry")
+        if geometry:
+            self.restoreGeometry(geometry)
+
+    def closeEvent(self, event) -> None:
+        self.settings.setValue("window_geometry", self.saveGeometry())
+        super().closeEvent(event)
