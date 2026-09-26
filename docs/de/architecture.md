@@ -7,3 +7,5 @@ Das angenommene Verhalten steht in `docs/PLAN.md`. Die Aufgaben werden einzeln a
 Die Anwendung sendet selbst keine Dateien an Telegram. Der separate Telegram Media Sender liest die lokale versionierte Datei `publication-plan.json`.
 
 FFprobe ermittelt die Audiospuren. FFmpeg übernimmt die gewählte Spur mit Stream Copy (`-c:a copy`) ohne Neukodierung. Die Anwendung installiert die Audiodatei erst, nachdem Spur, Codec, Dauer und vollständiges Lesen geprüft wurden. Der Release muss ein geprüftes FFmpeg/FFprobe-Paar und die zugehörigen Hinweise enthalten.
+
+Kopier- und Archivoperationen haben ein privates SQLite-Protokoll, Prüfsummen pro Schritt, Wiederherstellung nach einem Neustart und eine Sperre für einzelne Schreibvorgänge. Das Löschen von Originalen ist eine separate, ausgeschaltete Option: Es erfordert eine exakt bestätigte Pfadliste, eine erneut geprüfte Audiodatei, unveränderte Quelldaten und die Bestätigung, dass weitere ausgewählte Containerdaten gespeichert wurden.

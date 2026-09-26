@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import selectors
 import shutil
@@ -67,6 +68,10 @@ class AudioExtractionResult:
     codec: str
     duration_seconds: float | None
     size: int
+    output_sha256: str
+    source_size: int
+    source_mtime_ns: int
+    source_sha256: str | None
 
 
 _SUFFIXES = {
@@ -103,6 +108,14 @@ def _optional_duration(value) -> float | None:
         return parsed if parsed >= 0 else None
     except (TypeError, ValueError):
         return None
+
+
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        while chunk := stream.read(1024 * 1024):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def _resolve_tool(value: str | Path | None, bundled_name: str) -> str:
@@ -244,7 +257,8 @@ def extract_audio_lossless(input_path: str | Path, output_stem: str | Path,
                            ffmpeg_path: str | Path | None = None,
                            ffprobe_path: str | Path | None = None,
                            cancelled: Callable[[], bool] | None = None,
-                           progress: Callable[[float | None], None] | None = None) -> AudioExtractionResult:
+                           progress: Callable[[float | None], None] | None = None,
+                           capture_source_hash: bool = False) -> AudioExtractionResult:
     """Copy one selected stream without encoding, validate it, then install it."""
     source = Path(input_path).expanduser()
     try:
@@ -258,6 +272,11 @@ def extract_audio_lossless(input_path: str | Path, output_stem: str | Path,
         raise AudioProcessingError("The source changed while FFprobe was inspecting it.") from exc
     if (after_probe.st_size, after_probe.st_mtime_ns) != (source_stat.st_size, source_stat.st_mtime_ns):
         raise AudioProcessingError("The source changed while FFprobe was inspecting it.")
+    source_digest = _sha256(source) if capture_source_hash else None
+    if capture_source_hash:
+        current = source.lstat()
+        if (current.st_size, current.st_mtime_ns) != (source_stat.st_size, source_stat.st_mtime_ns):
+            raise AudioProcessingError("The source changed while its deletion fingerprint was being recorded.")
     if not source_info.audio_streams:
         raise AudioProcessingError("This file has no audio streams.")
     if stream_index is None:
@@ -271,7 +290,7 @@ def extract_audio_lossless(input_path: str | Path, output_stem: str | Path,
 
     destination_stem = Path(output_stem).expanduser()
     destination = destination_stem.with_suffix(output_suffix(selected.codec))
-    if destination.parent.exists() and destination.parent.is_symlink():
+    if destination.parent.is_symlink():
         raise AudioProcessingError("The audio output folder must not be a symbolic link.")
     destination = destination.parent.resolve(strict=False) / destination.name
     if destination.resolve(strict=False) == source.resolve(strict=False):
@@ -295,6 +314,8 @@ def extract_audio_lossless(input_path: str | Path, output_stem: str | Path,
         after_source = source.lstat()
         if (after_source.st_size, after_source.st_mtime_ns) != (source_stat.st_size, source_stat.st_mtime_ns):
             raise AudioProcessingError("The source changed during audio extraction.")
+        if capture_source_hash and _sha256(source) != source_digest:
+            raise AudioProcessingError("The source contents changed during audio extraction.")
         extracted = probe_media(temporary, ffprobe_path)
         if len(extracted.audio_streams) != 1:
             raise AudioProcessingError("The output does not contain exactly one audio track.")
@@ -311,9 +332,12 @@ def extract_audio_lossless(input_path: str | Path, output_stem: str | Path,
         _run_ffmpeg(verify_command, cancelled)
         if cancelled is not None and cancelled():
             raise AudioOperationCancelled("Audio extraction was cancelled.")
+        output_digest = _sha256(temporary)
         _install_without_overwrite(temporary, destination)
         return AudioExtractionResult(str(destination), selected.index, selected.codec,
-                                     selected.duration_seconds, destination.stat().st_size)
+                                     selected.duration_seconds, destination.stat().st_size,
+                                     output_digest, source_stat.st_size, source_stat.st_mtime_ns,
+                                     source_digest)
     finally:
         try:
             temporary.unlink(missing_ok=True)
