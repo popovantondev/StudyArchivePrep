@@ -23,6 +23,8 @@ from PySide6.QtWidgets import (
 )
 
 from .i18n import LANGUAGES, LANGUAGE_LABELS, tr
+from .project import ProjectState, SourceRoot
+from .project_repository import ProjectRepository, ProjectStorageError
 
 
 STYLE = """
@@ -47,10 +49,13 @@ QListWidget::item:selected { color: #183451; background: #e5effb; }
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, language: str, settings: QSettings):
+    def __init__(self, language: str, settings: QSettings,
+                 repository: ProjectRepository | None = None):
         super().__init__()
         self.settings = settings
+        self.repository = repository or ProjectRepository()
         self.language = language if language in LANGUAGES else "en"
+        self._current_project: ProjectState | None = None
         self.source_paths: list[Path] = []
         self.output_path: Path | None = None
         self.setWindowTitle(tr("window_title", self.language))
@@ -120,6 +125,19 @@ class MainWindow(QMainWindow):
         self.setup_hint.setObjectName("muted")
         self.setup_hint.setWordWrap(True)
         setup_layout.addWidget(self.setup_hint)
+
+        recent_header = QHBoxLayout()
+        self.recent_label = QLabel()
+        self.recent_label.setObjectName("section")
+        recent_header.addWidget(self.recent_label)
+        recent_header.addStretch(1)
+        self.recent_picker = QComboBox()
+        self.recent_picker.setMinimumWidth(180)
+        recent_header.addWidget(self.recent_picker)
+        self.open_button = QPushButton()
+        self.open_button.clicked.connect(self._open_selected_project)
+        recent_header.addWidget(self.open_button)
+        setup_layout.addLayout(recent_header)
 
         sources_header = QHBoxLayout()
         self.sources_label = QLabel()
@@ -213,6 +231,8 @@ class MainWindow(QMainWindow):
         self.intro.setText(self._text("intro"))
         self.setup_title.setText(self._text("setup_title"))
         self.setup_hint.setText(self._text("setup_hint"))
+        self.recent_label.setText(self._text("recent_label"))
+        self.open_button.setText(self._text("open_project"))
         self.sources_label.setText(self._text("sources_label"))
         self.add_button.setText(self._text("add_source"))
         self.remove_button.setText(self._text("remove_source"))
@@ -224,6 +244,7 @@ class MainWindow(QMainWindow):
         self.steps_title.setText(self._text("next_steps"))
         self.steps_body.setText(self._text("next_steps_body"))
         self._refresh_paths()
+        self._refresh_recent_projects()
 
     def _language_changed(self, _index: int) -> None:
         language = self.language_picker.currentData()
@@ -281,7 +302,59 @@ class MainWindow(QMainWindow):
             if source == self.output_path or source in self.output_path.parents or self.output_path in source.parents:
                 self._set_status(self._text("source_output_overlap"), error=True)
                 return
+        try:
+            roots = tuple(SourceRoot.create(path) for path in self.source_paths)
+            project = ProjectState.create(
+                self.source_paths[0].name, self.output_path, self.start_date.date().toString("yyyy-MM-dd"), roots
+            )
+            saved = self.repository.save(project)
+        except (ProjectStorageError, OSError, ValueError):
+            self._set_status(self._text("project_storage_error"), error=True)
+            return
+        self._current_project = saved
+        self._refresh_recent_projects(select_id=saved.id)
         self._set_status(self._text("project_ready"), error=False)
+
+    def _refresh_recent_projects(self, select_id: str | None = None) -> None:
+        try:
+            projects = self.repository.list_projects()
+        except ProjectStorageError:
+            self.recent_picker.clear()
+            self.recent_picker.addItem(self._text("project_storage_error"), None)
+            self.open_button.setEnabled(False)
+            return
+        self.recent_picker.clear()
+        if not projects:
+            self.recent_picker.addItem(self._text("recent_none"), None)
+            self.open_button.setEnabled(False)
+            return
+        for project in projects:
+            self.recent_picker.addItem(project.name, project.id)
+        self.open_button.setEnabled(True)
+        if select_id is not None:
+            index = self.recent_picker.findData(select_id)
+            if index >= 0:
+                self.recent_picker.setCurrentIndex(index)
+
+    def _open_selected_project(self) -> None:
+        project_id = self.recent_picker.currentData()
+        if not project_id:
+            return
+        try:
+            project = self.repository.load(project_id)
+        except ProjectStorageError:
+            self._set_status(self._text("project_storage_error"), error=True)
+            return
+        self._current_project = project
+        self.source_paths = [Path(root.path) for root in project.roots]
+        self.output_path = Path(project.output_path)
+        self.date_enabled.setChecked(project.start_date is not None)
+        if project.start_date:
+            parsed_date = QDate.fromString(project.start_date, "yyyy-MM-dd")
+            if parsed_date.isValid():
+                self.start_date.setDate(parsed_date)
+        self._refresh_paths()
+        self._set_status(self._text("project_loaded"), error=False)
 
     def _set_status(self, value: str, error: bool) -> None:
         self.status.setText(value)
