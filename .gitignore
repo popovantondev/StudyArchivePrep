@@ -1,0 +1,17 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+.coverage
+build/
+dist/
+previews/
+.work-memory/
+.study-archive-prep/
+*.sqlite3
+*.db
+*.gguf
+*.session
+*.log
