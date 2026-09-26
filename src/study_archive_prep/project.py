@@ -247,6 +247,12 @@ class ProjectState:
     def with_revision(self, revision: int) -> "ProjectState":
         return replace(self, revision=revision)
 
+    def block(self, block_id: str) -> PublicationBlock:
+        for item in self.blocks:
+            if item.id == block_id:
+                return item
+        raise KeyError(block_id)
+
     def to_dict(self) -> dict[str, Any]:
         return {
             "schema_version": self.schema_version,
