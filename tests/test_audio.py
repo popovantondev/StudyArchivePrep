@@ -149,6 +149,19 @@ if os.environ.get("AUDIO_TEST_SLEEP"):
             actual = list(struct.unpack("<" + "h" * stream.getnframes(), stream.readframes(stream.getnframes())))
         self.assertEqual(actual, expected_samples)
 
+    def test_opt_in_deletion_fingerprint_covers_unchanged_source_and_output(self):
+        import hashlib
+        original = self.input.read_bytes()
+        before = self.input.stat()
+        result = extract_audio_lossless(self.input, self.base / "hashed-out" / "lesson",
+                                        stream_index=1, ffmpeg_path=self.ffmpeg,
+                                        ffprobe_path=self.ffprobe, capture_source_hash=True)
+        self.assertEqual(result.source_sha256, hashlib.sha256(original).hexdigest())
+        self.assertEqual(result.source_size, before.st_size)
+        self.assertEqual(result.source_mtime_ns, before.st_mtime_ns)
+        self.assertEqual(result.output_sha256,
+                         hashlib.sha256(Path(result.output_path).read_bytes()).hexdigest())
+
 
 if __name__ == "__main__":
     unittest.main()

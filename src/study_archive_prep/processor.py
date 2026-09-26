@@ -112,12 +112,14 @@ def _install_without_overwrite(temp_path: Path, destination: Path) -> None:
 
 
 def _copy_one(root: Path, item: PlannedCopy, cancel: Callable[[], bool] | None,
-              completed: list[CompletedOutput]) -> CompletedOutput:
+              completed: list[CompletedOutput], operation_hook=None) -> CompletedOutput:
     source = Path(item.source_path)
     destination = _safe_destination(root, item.destination)
     _ensure_directory(destination.parent)
     before = _verify_source(source, item.size, item.mtime_ns)
     fd, temp_path = _temporary_file(destination.parent)
+    if operation_hook is not None:
+        operation_hook("temporary", item.destination, str(temp_path), None)
     source_digest = hashlib.sha256()
     try:
         with os.fdopen(fd, "wb") as output, source.open("rb") as input_stream:
@@ -148,11 +150,13 @@ def _copy_one(root: Path, item: PlannedCopy, cancel: Callable[[], bool] | None,
 
 def _archive_one(root: Path, archive: PlannedArchive,
                  cancel: Callable[[], bool] | None,
-                 completed: list[CompletedOutput]) -> CompletedOutput:
+                 completed: list[CompletedOutput], operation_hook=None) -> CompletedOutput:
     destination = _safe_destination(root, archive.destination)
     _ensure_directory(destination.parent)
     fd, temp_path = _temporary_file(destination.parent)
     os.close(fd)
+    if operation_hook is not None:
+        operation_hook("temporary", archive.destination, str(temp_path), None)
     expected_names = list(archive.member_names)
     if (len(expected_names) != len(archive.member_file_ids)
             or len(archive.member_sources) != len(archive.member_file_ids)):
@@ -213,7 +217,8 @@ def _archive_one(root: Path, archive: PlannedArchive,
 
 def execute_processing_plan(plan: ProcessingPlan,
                             cancelled: Callable[[], bool] | None = None,
-                            progress: Callable[[int, int, str], None] | None = None) -> ProcessingResult:
+                            progress: Callable[[int, int, str], None] | None = None,
+                            operation_hook=None) -> ProcessingResult:
     """Execute one preflight snapshot sequentially; never overwrite outputs."""
     if not plan.can_execute:
         blocking = next(issue for issue in plan.issues if issue.blocking)
@@ -235,15 +240,23 @@ def execute_processing_plan(plan: ProcessingPlan,
     try:
         for item in plan.copies:
             _check_cancel(cancelled, completed)
-            result = _copy_one(root, item, cancelled, completed)
+            if operation_hook is not None:
+                operation_hook("started", item.destination, None, None)
+            result = _copy_one(root, item, cancelled, completed, operation_hook)
             completed.append(result)
+            if operation_hook is not None:
+                operation_hook("completed", item.destination, None, result)
             done += 1
             if progress is not None:
                 progress(done, total, result.path)
         for archive in plan.archives:
             _check_cancel(cancelled, completed)
-            result = _archive_one(root, archive, cancelled, completed)
+            if operation_hook is not None:
+                operation_hook("started", archive.destination, None, None)
+            result = _archive_one(root, archive, cancelled, completed, operation_hook)
             completed.append(result)
+            if operation_hook is not None:
+                operation_hook("completed", archive.destination, None, result)
             done += 1
             if progress is not None:
                 progress(done, total, result.path)
