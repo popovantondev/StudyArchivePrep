@@ -15,6 +15,7 @@ class PlannedCopy:
     source_path: str
     destination: str
     size: int
+    mtime_ns: int = 0
 
 
 @dataclass(frozen=True)
@@ -23,6 +24,7 @@ class PlannedArchive:
     member_file_ids: tuple[str, ...]
     member_names: tuple[str, ...]
     uncompressed_size: int
+    member_sources: tuple[PlannedCopy, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -130,7 +132,7 @@ def build_preflight(project: ProjectState) -> ProcessingPlan:
         if parent.kind == "week":
             if item.category == "study_archive" and source.suffix.casefold() == ".zip":
                 destination = f"{week_name}/{_unique_name(name, _siblings_used(copies, week_name))}"
-                copies.append(PlannedCopy(item.id, str(source), destination, item.size))
+                copies.append(PlannedCopy(item.id, str(source), destination, item.size, item.mtime_ns))
             else:
                 archive_groups.setdefault(f"{week_name}/Неделя_{week_number:02d}_Материалы_на_неделю.zip", []).append((item, name))
             continue
@@ -141,24 +143,24 @@ def build_preflight(project: ProjectState) -> ProcessingPlan:
         if item.category == "audio_video":
             folder = f"{base}/01_Аудио"
             relative = f"{folder}/{_unique_name(name, _siblings_used(copies, folder))}"
-            copies.append(PlannedCopy(item.id, str(source), relative, item.size))
+            copies.append(PlannedCopy(item.id, str(source), relative, item.size, item.mtime_ns))
         elif item.category == "subtitle":
             folder = f"{base}/02_Субтитры"
             relative = f"{folder}/{_unique_name(name, _siblings_used(copies, folder))}"
-            copies.append(PlannedCopy(item.id, str(source), relative, item.size))
+            copies.append(PlannedCopy(item.id, str(source), relative, item.size, item.mtime_ns))
         elif item.category in {"screenshot", "screenshot_archive"}:
             if item.category == "screenshot_archive" and source.suffix.casefold() == ".zip":
                 relative = f"{base}/03_Скриншоты.zip"
                 if any(copy.destination == relative for copy in copies):
                     relative = f"{base}/03_Скриншоты ({len([copy for copy in copies if copy.destination.startswith(base + '/03_Скриншоты')]) + 1}).zip"
-                copies.append(PlannedCopy(item.id, str(source), relative, item.size))
+                copies.append(PlannedCopy(item.id, str(source), relative, item.size, item.mtime_ns))
             else:
                 archive_groups.setdefault(f"{base}/03_Скриншоты.zip", []).append((item, name))
         elif item.category == "extra_archive" and source.suffix.casefold() == ".zip":
             relative = f"{base}/04_Дополнительные_материалы.zip"
             if any(copy.destination.startswith(f"{base}/04_Дополнительные_материалы") for copy in copies):
                 relative = f"{base}/04_Дополнительные_материалы ({len([copy for copy in copies if copy.destination.startswith(base + '/04_Дополнительные_материалы')]) + 1}).zip"
-            copies.append(PlannedCopy(item.id, str(source), relative, item.size))
+            copies.append(PlannedCopy(item.id, str(source), relative, item.size, item.mtime_ns))
         else:
             archive_groups.setdefault(f"{base}/04_Дополнительные_материалы.zip", []).append((item, name))
 
@@ -174,8 +176,11 @@ def build_preflight(project: ProjectState) -> ProcessingPlan:
         reserved.add(destination.casefold())
         used: set[str] = set()
         names = tuple(_unique_name(_safe_name(name), used) for _, name in members)
+        sources = tuple(PlannedCopy(item.id, str(_source_for(project, item)), member_name,
+                                    item.size, item.mtime_ns)
+                        for (item, _), member_name in zip(members, names))
         archives.append(PlannedArchive(destination, tuple(item.id for item, _ in members), names,
-                                       sum(item.size for item, _ in members)))
+                                       sum(item.size for item, _ in members), sources))
 
     destinations = [copy.destination for copy in copies] + [archive.destination for archive in archives]
     destination_set: set[str] = set()
