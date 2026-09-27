@@ -4,6 +4,8 @@ The application is split into a Qt interface and testable Python modules for pro
 
 The accepted behavior is defined in `docs/PLAN.md`. Implement one task from the local `.work-memory/TASKS.md` queue at a time. Project files and logs remain in local application data; synthetic fixtures are used by automated tests.
 
+After project setup, a dedicated workspace shows the ordered week/day tree and files that still need assignment. Users can add week/day groups, assign unresolved files, move and reorder blocks, edit publication text, and include or exclude files. Scans, audio extraction, title inference, and journaled copy/archive preparation run outside the UI thread. Extracted audio is stored under private app data and represented as a project source; the original video is kept and excluded from the prepared queue.
+
 No code in the application sends files to Telegram. The optional `publication-plan.json` is a versioned local interchange file consumed by the separate Telegram Media Sender.
 
 Audio tracks are inspected with FFprobe. FFmpeg uses audio stream copy (`-c:a copy`) and installs an output only after track, codec, duration, and full-read checks pass. No audio is re-encoded. The release build must bundle an audited FFmpeg/FFprobe pair and include its applicable notices.

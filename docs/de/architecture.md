@@ -2,6 +2,8 @@
 
 Die Anwendung trennt die Qt-Oberfläche von testbaren Python-Modulen für Projektstatus, Scans, Dateiverarbeitung, Titelvorschläge, Speicherung und Export der Veröffentlichungsreihenfolge. Lange Scans und Medienoperationen laufen getrennt vom UI-Thread.
 
+Nach der Projekteinstellung zeigt ein eigener Arbeitsbereich den Baum aus Wochen und Tagen sowie Dateien, die noch zugeordnet werden müssen. Nutzer können Wochen und Tage anlegen, unklare Dateien zuordnen, Blöcke verschieben und sortieren, Veröffentlichungstexte bearbeiten und Dateien ein- oder ausschließen. Scans, Audioextraktion, lokale Titelvorschläge und die journalgestützte Vorbereitung laufen im Hintergrund. Extrahierter Ton liegt in privaten App-Daten und wird als eigene Quelle ins Projekt aufgenommen; das Originalvideo bleibt erhalten und wird von der Veröffentlichung ausgeschlossen.
+
 Das angenommene Verhalten steht in `docs/PLAN.md`. Die Aufgaben werden einzeln aus der lokalen `.work-memory/TASKS.md`-Warteschlange bearbeitet. Projekte und Protokolle bleiben in lokalen Anwendungsdaten; automatische Tests verwenden synthetische Beispiele.
 
 Die Anwendung sendet selbst keine Dateien an Telegram. Der separate Telegram Media Sender liest die lokale versionierte Datei `publication-plan.json`.

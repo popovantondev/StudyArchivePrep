@@ -8,7 +8,7 @@ Study Archive Prep ordnet Lernmaterial nach Datum, hilft bei der Prüfung von Au
 
 ## Projektstatus
 
-Dies ist eine frühe Entwicklungsversion. Der erste Bildschirm erfasst Quellordner und einen getrennten Ausgabeordner. Scannen, Verarbeitung, Export des Veröffentlichungsplans und lokale Titelvorschläge werden noch entwickelt. Diese Version sendet keine Telegram-Nachrichten.
+Dies ist eine frühe Entwicklungsversion. Die App scannt ausgewählte Quellordner, ordnet Dateien nach Datum und Woche, lässt die Veröffentlichungsreihenfolge prüfen und bearbeiten, kopiert Dateien und erstellt ZIP-Archive mit Wiederherstellungsjournal, extrahiert Ton ohne Neukodierung und exportiert einen versionierten Veröffentlichungsplan. Für russische lokale Titelvorschläge werden die ersten fünf oder zehn Minuten einer ausgewählten SRT-Datei analysiert; Modell und lokale Laufzeit müssen installiert sein. Die App sendet keine Telegram-Nachrichten.
 
 ## Aus den Quellen starten
 
@@ -26,9 +26,9 @@ Für eine getrennte UI-Vorschau `--data-dir /tmp/study-archive-prep-preview` ang
 
 ## Datensicherheit und Datenschutz
 
-Der Nutzer wählt die Quellordner. Diese Version scannt oder sendet noch keine Dateien an Telegram. Lernmaterial, Untertiteltexte, private Pfade, lokale Projekte, Modellgewichte, Kontodaten und Laufzeitprotokolle gehören nicht in Git.
+Quellordner werden beim Erstellen eines Projekts oder nach einem erneuten Scan lokal untersucht. Die Ausgabe wird getrennt gespeichert; temporäre Dateien und ein privates Wiederherstellungsjournal schützen bestehende Dateien vor Überschreiben. Extrahierter Ton wird zunächst in privaten App-Daten gespeichert und danach in die vorbereitete Ausgabe kopiert. Originalaufnahmen bleiben erhalten. Dateien werden nicht ins Internet hochgeladen. Lernmaterial, Untertiteltexte, private Pfade, lokale Projekte, Modellgewichte, Kontodaten und Laufzeitprotokolle gehören nicht in Git.
 
-Die Anwendung verwendet SQLite und wird lokale Sprachmodelle für Titelvorschläge verwenden. Modellgewichte werden nur auf ausdrücklichen Wunsch heruntergeladen und nicht im Repository gespeichert. Siehe [Rechte und Hinweise zu Drittsoftware](../../THIRD_PARTY_NOTICES.md).
+Die Anwendung verwendet SQLite für Projektstatus und Operationsverlauf. Modellgewichte werden nur nach einem ausdrücklichen Klick heruntergeladen und nicht im Repository gespeichert. Siehe [Rechte und Hinweise zu Drittsoftware](../../THIRD_PARTY_NOTICES.md).
 
 ## Entwicklung
 

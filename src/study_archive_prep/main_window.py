@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (
     QSizePolicy,
     QVBoxLayout,
     QWidget,
+    QStackedWidget,
 )
 
 from .i18n import LANGUAGES, LANGUAGE_LABELS, tr
@@ -54,6 +55,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.settings = settings
         self.repository = repository or ProjectRepository()
+        self.data_directory = self.repository.database_path.parent
         self.language = language if language in LANGUAGES else "en"
         self._current_project: ProjectState | None = None
         self.source_paths: list[Path] = []
@@ -63,6 +65,11 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(820, 640)
         self.setStyleSheet(STYLE)
         self._build_ui()
+        self._setup_page = self.centralWidget()
+        self._pages = QStackedWidget()
+        self._pages.addWidget(self._setup_page)
+        self.setCentralWidget(self._pages)
+        self._workspace = None
         self._restore_window()
 
     def _text(self, key: str) -> str:
@@ -314,6 +321,7 @@ class MainWindow(QMainWindow):
         self._current_project = saved
         self._refresh_recent_projects(select_id=saved.id)
         self._set_status(self._text("project_ready"), error=False)
+        self._open_workspace(saved)
 
     def _refresh_recent_projects(self, select_id: str | None = None) -> None:
         try:
@@ -355,6 +363,31 @@ class MainWindow(QMainWindow):
                 self.start_date.setDate(parsed_date)
         self._refresh_paths()
         self._set_status(self._text("project_loaded"), error=False)
+        self._open_workspace(project)
+
+    def _open_workspace(self, project: ProjectState) -> None:
+        from .workspace_window import WorkspaceWidget
+
+        if self._workspace is not None:
+            self._workspace.stop_and_wait()
+            self._pages.removeWidget(self._workspace)
+            self._workspace.setParent(None)
+            self._workspace.deleteLater()
+        self._workspace = WorkspaceWidget(
+            project, self.repository, self.data_directory, self.language,
+            on_language_changed=self._workspace_language_changed,
+            on_back=self._back_to_setup,
+        )
+        self._pages.addWidget(self._workspace)
+        self._pages.setCurrentWidget(self._workspace)
+
+    def _workspace_language_changed(self, language: str) -> None:
+        self.language = language
+        self.settings.setValue("language", language)
+        self.language_picker.setCurrentIndex(LANGUAGES.index(language))
+
+    def _back_to_setup(self) -> None:
+        self._pages.setCurrentWidget(self._setup_page)
 
     def _set_status(self, value: str, error: bool) -> None:
         self.status.setText(value)
@@ -366,5 +399,7 @@ class MainWindow(QMainWindow):
             self.restoreGeometry(geometry)
 
     def closeEvent(self, event) -> None:
+        if self._workspace is not None:
+            self._workspace.stop_and_wait()
         self.settings.setValue("window_geometry", self.saveGeometry())
         super().closeEvent(event)

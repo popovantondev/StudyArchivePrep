@@ -8,7 +8,7 @@ Study Archive Prep organizes study files into dated folders, helps review record
 
 ## Project status
 
-This is an early development build. The first screen currently collects source folders and a separate output folder. Scanning, processing, publishing-plan export, and local title suggestions are still being implemented. This build does not send Telegram messages.
+This is an early development build. It scans selected source folders, groups files by dates and weeks, lets you review and edit the publication order, copies files and creates ZIP archives with a local recovery journal, extracts audio from video without re-encoding, and exports a versioned publication plan. Local Russian title suggestions use the selected first five or ten minutes of an SRT after the model and local inference engine are installed. This app does not send Telegram messages.
 
 ## Run from source
 
@@ -26,9 +26,9 @@ For an isolated UI preview, pass `--data-dir /tmp/study-archive-prep-preview`. T
 
 ## Safety and privacy
 
-Source folders are selected by the user and are not scanned until a project scan action is added. No files are uploaded by this application. Never add study files, subtitle text, personal paths, local projects, model weights, account credentials, or runtime logs to Git.
+Source folders are selected by the user and scanned locally when a project is created or rescanned. Processing writes to a separate output folder, uses temporary files and a private recovery journal, and does not replace existing files. Extracted audio is kept in private app data before it is copied to the prepared output. Original recordings are retained. No files are uploaded by this application. Never add study files, subtitle text, personal paths, local projects, model weights, account credentials, or runtime logs to Git.
 
-The project uses a SQLite database and will use a local language model for title suggestions. Model weights are downloaded only after the user asks for them and will not be stored in this repository. See the [rights and third-party notices](THIRD_PARTY_NOTICES.md).
+The project uses SQLite for project state and operation history. Model weights are downloaded only after the user asks for them and are not stored in this repository. See the [rights and third-party notices](THIRD_PARTY_NOTICES.md).
 
 ## Development
 
