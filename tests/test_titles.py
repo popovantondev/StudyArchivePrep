@@ -78,6 +78,11 @@ class TitleProposalTests(unittest.TestCase):
                          "Мазь из листьев подорожника")
         self.assertIsNone(sanitize_russian_title("How plants heal"))
         self.assertIsNone(sanitize_russian_title("Wundsalbe из подорожника"))
+        self.assertIsNone(sanitize_russian_title("Мазь из спица вegerика"))
+        self.assertEqual(sanitize_russian_title("Форма HTML для регистрации"),
+                         "Форма HTML для регистрации")
+        self.assertIsNone(sanitize_russian_title(
+            "Создаем форму с полями имени, email, списком, флажком и кнопкой отправки"))
         self.assertIsNone(sanitize_russian_title("Одно"))
         self.assertIsNone(sanitize_russian_title("Название\nи второй ответ"))
         self.assertIsNone(sanitize_russian_title("Мазь / опасный путь"))
