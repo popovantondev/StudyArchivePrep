@@ -16,6 +16,9 @@ _TIMESTAMP = re.compile(
 _TAG = re.compile(r"<[^>]*>")
 _ASSIGNMENT = re.compile(r"\{\\[^}]*\}")
 _VARIANT = re.compile(r"(?i)(?:^|[._ -])(ru|de|en|рус|нем|720p|1080p|480p|\d{3,4}p)$")
+_ALLOWED_LATIN_TERMS = {"CSS", "Excel", "HTML", "JavaScript", "MKV", "M4A", "MP3", "MP4",
+                        "PDF", "PowerPoint", "Python", "SRT", "SQL", "Telegram", "USB",
+                        "Wi-Fi", "WiFi", "Windows", "Word", "YouTube"}
 
 
 @dataclass(frozen=True)
@@ -114,9 +117,12 @@ def sanitize_russian_title(value: str) -> str | None:
     if not title or len(title) > 100 or "\n" in title or "/" in title or "\\" in title:
         return None
     words = title.split()
-    if not 2 <= len(words) <= 10 or any(ord(ch) < 32 for ch in title):
+    if not 2 <= len(words) <= 7 or any(ord(ch) < 32 for ch in title):
         return None
     if not re.match(r"[А-Яа-яЁё]", title):
+        return None
+    latin_words = re.findall(r"[A-Za-z][A-Za-z0-9.+_-]*", title)
+    if any(not word.isupper() and word not in _ALLOWED_LATIN_TERMS for word in latin_words):
         return None
     return title
 
