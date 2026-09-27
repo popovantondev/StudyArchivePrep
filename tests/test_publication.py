@@ -1,5 +1,6 @@
 import tempfile
 import unittest
+from dataclasses import replace
 from pathlib import Path
 
 from study_archive_prep.project import ProjectState, PublicationBlock, SourceRoot, StudyFile
@@ -118,13 +119,43 @@ class PublicationEditorTests(unittest.TestCase):
     def test_text_rename_and_inclusion_are_undoable(self):
         text = self.editor.add_text(self.week1.id, "Материалы на неделю")
         self.assertEqual(self.editor.project.block(text.id).text, "Материалы на неделю")
-        self.editor.rename(text.id, "Обновлённое сообщение")
+        self.editor.edit_text(text.id, "Обновлённое сообщение")
+        self.assertEqual(self.editor.project.block(text.id).text, "Обновлённое сообщение")
         self.editor.set_included(text.id, False)
         self.assertFalse(self.editor.project.block(text.id).included)
         self.editor.undo()
         self.assertTrue(self.editor.project.block(text.id).included)
         self.editor.undo()
         self.assertEqual(self.editor.project.block(text.id).text, "Материалы на неделю")
+
+    def test_editing_a_day_updates_the_date_used_for_output_paths(self):
+        self.editor.set_day_date(self.day1.id, "2026-08-05")
+        self.assertEqual(self.editor.project.block(self.day1.id).study_date, "2026-08-05")
+        self.assertEqual(self.editor.project.block(self.day1.id).title, "2026-08-05")
+        self.editor.undo()
+        with self.assertRaises(ValueError):
+            self.editor.set_day_date(self.day1.id, "not-a-date")
+
+    def test_unassigned_file_can_be_added_to_a_week_and_undo_restores_assignment(self):
+        unassigned = StudyFile.create(self.editor.project.roots[0].id, "misc.pdf", "misc.pdf", 5, 1,
+                                      category="other", week_number=None)
+        self.editor.project = replace(self.editor.project,
+                                      files=(*self.editor.project.files, unassigned))
+        added = self.editor.add_file(unassigned.id, self.week1.id)
+        self.assertEqual(added.file_id, unassigned.id)
+        self.assertIn(added.id, {block.id for block in self.editor.project.blocks})
+        self.editor.undo()
+        self.assertFalse(any(block.kind == "file" and block.file_id == unassigned.id
+                             for block in self.editor.project.blocks))
+
+    def test_empty_publication_groups_can_be_created_for_manual_distribution(self):
+        editor = PublicationPlanEditor(ProjectState.create(
+            "Empty course", self.editor.project.output_path, "2026-08-03",
+            self.editor.project.roots))
+        week = editor.add_week("Неделя 1")
+        day = editor.add_day(week.id, "2026-08-03")
+        self.assertEqual(editor.project.block(day.id).parent_id, week.id)
+        self.assertEqual(editor.project.block(day.id).study_date, "2026-08-03")
 
     def test_new_edit_after_undo_discards_redo_history(self):
         self.editor.rename(self.week1.id, "Renamed")

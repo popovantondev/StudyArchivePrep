@@ -115,8 +115,9 @@ class PublicationPlanEditor:
     def can_redo(self) -> bool:
         return bool(self._redo)
 
-    def _commit(self, blocks: Iterable[PublicationBlock]) -> None:
-        updated = replace(self.project, blocks=tuple(blocks))
+    def _commit(self, blocks: Iterable[PublicationBlock], files=None) -> None:
+        updated = replace(self.project, blocks=tuple(blocks),
+                          files=tuple(files) if files is not None else self.project.files)
         if updated == self.project:
             return
         self._undo.append(self.project)
@@ -183,13 +184,32 @@ class PublicationPlanEditor:
                    for item in self.project.blocks]
         self._commit(updated)
 
+    def set_day_date(self, block_id: str, study_date: str) -> None:
+        blocks = self._block_map()
+        if block_id not in blocks or blocks[block_id].kind != "day":
+            raise ValueError("only a study day can be assigned a date")
+        updated = [replace(item, title=study_date, study_date=study_date)
+                   if item.id == block_id else item for item in self.project.blocks]
+        self._commit(updated)
+
+    def edit_text(self, block_id: str, text: str) -> None:
+        blocks = self._block_map()
+        if block_id not in blocks or blocks[block_id].kind != "text":
+            raise ValueError("only a text block can be edited")
+        updated = [replace(item, title=text, text=text) if item.id == block_id else item
+                   for item in self.project.blocks]
+        self._commit(updated)
+
     def set_included(self, block_id: str, included: bool) -> None:
         blocks = self._block_map()
         if block_id not in blocks:
             raise KeyError("publication block was not found")
         updated = [replace(item, included=included) if item.id == block_id else item
                    for item in self.project.blocks]
-        self._commit(updated)
+        file_id = blocks[block_id].file_id if blocks[block_id].kind == "file" else None
+        files = ([replace(item, included=included) if item.id == file_id else item
+                  for item in self.project.files] if file_id is not None else None)
+        self._commit(updated, files)
 
     def add_text(self, parent_id: str, text: str, position: int | None = None) -> PublicationBlock:
         blocks = self._block_map()
@@ -211,6 +231,62 @@ class PublicationPlanEditor:
         new_block = moved[index]
         self._commit((*untouched, *ordered))
         return new_block
+
+    def add_file(self, file_id: str, parent_id: str, title: str | None = None,
+                 position: int | None = None) -> PublicationBlock:
+        """Assign a previously unplaced source file to a week or a study day."""
+        files = {item.id: item for item in self.project.files}
+        if file_id not in files:
+            raise KeyError("study file was not found")
+        if any(block.kind == "file" and block.file_id == file_id for block in self.project.blocks):
+            raise ValueError("study file is already assigned to the publication plan")
+        parent = self._block_map().get(parent_id)
+        if parent is None or parent.kind not in {"week", "day"}:
+            raise ValueError("files must be assigned to a week or study day")
+        siblings = sorted((block for block in self.project.blocks if block.parent_id == parent_id),
+                          key=lambda block: block.position)
+        index = len(siblings) if position is None else position
+        if isinstance(index, bool) or index < 0:
+            raise ValueError("position must be a non-negative integer")
+        index = min(index, len(siblings))
+        siblings.insert(index, PublicationBlock.create(
+            "file", title or files[file_id].name, index, parent_id=parent_id,
+            file_id=file_id, included=files[file_id].included))
+        untouched = [block for block in self.project.blocks if block.parent_id != parent_id]
+        self._commit((*untouched, *(replace(block, position=i) for i, block in enumerate(siblings))))
+        return siblings[index]
+
+    def add_week(self, title: str, position: int | None = None) -> PublicationBlock:
+        title = title.strip()
+        if not title:
+            raise ValueError("week title cannot be empty")
+        siblings = sorted((block for block in self.project.blocks if block.parent_id is None),
+                          key=lambda block: block.position)
+        index = len(siblings) if position is None else position
+        if isinstance(index, bool) or index < 0:
+            raise ValueError("position must be a non-negative integer")
+        index = min(index, len(siblings))
+        siblings.insert(index, PublicationBlock.create("week", title, index))
+        untouched = [block for block in self.project.blocks if block.parent_id is not None]
+        self._commit((*untouched, *(replace(block, position=i) for i, block in enumerate(siblings))))
+        return siblings[index]
+
+    def add_day(self, week_id: str, study_date: str,
+                position: int | None = None) -> PublicationBlock:
+        week = self._block_map().get(week_id)
+        if week is None or week.kind != "week":
+            raise ValueError("a study day must belong to a week")
+        siblings = sorted((block for block in self.project.blocks if block.parent_id == week_id),
+                          key=lambda block: block.position)
+        index = len(siblings) if position is None else position
+        if isinstance(index, bool) or index < 0:
+            raise ValueError("position must be a non-negative integer")
+        index = min(index, len(siblings))
+        siblings.insert(index, PublicationBlock.create("day", study_date, index,
+                                                       parent_id=week_id, study_date=study_date))
+        untouched = [block for block in self.project.blocks if block.parent_id != week_id]
+        self._commit((*untouched, *(replace(block, position=i) for i, block in enumerate(siblings))))
+        return siblings[index]
 
     def undo(self) -> ProjectState:
         if not self._undo:
