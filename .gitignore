@@ -6,6 +6,9 @@ __pycache__/
 .pytest_cache/
 .coverage
 build/
+release-build/
+release-deps/
+StudyArchivePrep.spec
 dist/
 previews/
 .work-memory/

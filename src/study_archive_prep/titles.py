@@ -93,6 +93,8 @@ def build_title_prompt(excerpt: SubtitleExcerpt, *, source_language: str = "auto
         raise ValueError("unsupported source language")
     return (
         "Придумай короткое русское название учебной записи по фрагменту субтитров. "
+        "Если субтитры не на русском, переведи смысл на русский. "
+        "Не оставляй в названии немецкие или английские слова. "
         "Ответь только названием: 2–7 слов, без кавычек, точки, пояснений и списков. "
         "Сохрани точный смысл; не добавляй факты, которых нет в тексте. "
         f"Язык субтитров: {source_language}.\n\nСубтитры за первые "
@@ -114,7 +116,7 @@ def sanitize_russian_title(value: str) -> str | None:
     words = title.split()
     if not 2 <= len(words) <= 10 or any(ord(ch) < 32 for ch in title):
         return None
-    if not re.search(r"[А-Яа-яЁё]", title):
+    if not re.match(r"[А-Яа-яЁё]", title):
         return None
     return title
 
@@ -228,7 +230,7 @@ def suggest_title(path: str | Path, runner: LlamaCliRunner, *, minutes: int = 10
         return None
     generated: GenerationResult = runner.generate(build_title_prompt(excerpt,
                                                                       source_language=source_language),
-                                                  max_tokens=48)
+                                                  max_tokens=128)
     title = sanitize_russian_title(generated.text)
     if title is None:
         return None

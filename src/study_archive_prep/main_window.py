@@ -1,10 +1,11 @@
 """Project setup window used as the first screen of Study Archive Prep."""
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 from PySide6.QtCore import QDate, Qt, QSettings
-from PySide6.QtGui import QFont
+from PySide6.QtGui import QAction, QFont
 from PySide6.QtWidgets import (
     QComboBox,
     QCheckBox,
@@ -64,6 +65,9 @@ class MainWindow(QMainWindow):
         self.resize(1060, 760)
         self.setMinimumSize(820, 640)
         self.setStyleSheet(STYLE)
+        self.about_action = QAction(self)
+        self.about_action.triggered.connect(self._show_about)
+        self.menuBar().addAction(self.about_action)
         self._build_ui()
         self._setup_page = self.centralWidget()
         self._pages = QStackedWidget()
@@ -250,8 +254,24 @@ class MainWindow(QMainWindow):
         self.create_button.setText(self._text("create_project"))
         self.steps_title.setText(self._text("next_steps"))
         self.steps_body.setText(self._text("next_steps_body"))
+        self.about_action.setText({"ru": "О программе", "de": "Über", "en": "About"}[self.language])
         self._refresh_paths()
         self._refresh_recent_projects()
+
+    def _show_about(self) -> None:
+        from . import __version__
+
+        frozen_root = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[2]))
+        notices = frozen_root / "resources" / "licenses" / "THIRD_PARTY_NOTICES.md"
+        text = {
+            "ru": (f"Study Archive Prep {__version__}\n\nЛокальная обработка материалов.\n"
+                   f"Уведомления о лицензиях и исходный код компонентов находятся в папке приложения: {notices.parent}."),
+            "de": (f"Study Archive Prep {__version__}\n\nLokale Verarbeitung von Lernmaterialien.\n"
+                   f"Lizenzhinweise und Quellcode der Komponenten: {notices.parent}."),
+            "en": (f"Study Archive Prep {__version__}\n\nStudy materials are processed locally.\n"
+                   f"Third-party notices and component source archives are in the app resources: {notices.parent}."),
+        }[self.language]
+        QMessageBox.about(self, self.about_action.text(), text)
 
     def _language_changed(self, _index: int) -> None:
         language = self.language_picker.currentData()

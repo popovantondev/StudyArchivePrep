@@ -174,7 +174,9 @@ pathlib.Path("'''+str(self.log)+'''").write_text(json.dumps(args), encoding="utf
 prompt = pathlib.Path(args[args.index("--file") + 1]).read_text(encoding="utf-8")
 if "--sleep" in args:
     time.sleep(5)
+print("Loading model...\\n\\n> " + prompt)
 print("Предложенное название: Практическая часть")
+print("Exiting...")
 '''
         if self.sleep:
             script = script.replace('args = sys.argv[1:]', 'args = sys.argv[1:] + ["--sleep"]')
@@ -192,6 +194,7 @@ print("Предложенное название: Практическая ча�
         args = json.loads(self.log.read_text())
         self.assertIn("--model", args)
         self.assertIn("--no-display-prompt", args)
+        self.assertEqual(args[args.index("--reasoning") + 1], "off")
         prompt_path = Path(args[args.index("--file") + 1])
         self.assertFalse(prompt_path.exists())
         self.assertEqual(list((self.base / "private-prompts").glob(".local-model-prompt-*")), [])

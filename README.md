@@ -6,6 +6,8 @@ macOS 13 or newer · Apple Silicon · Version 0.1.0
 
 Study Archive Prep organizes study files into dated folders, helps review recordings and subtitles, and prepares an ordered publication plan for Telegram Media Sender.
 
+![Study Archive Prep workspace with a synthetic demo project](docs/images/study-archive-prep-workspace.png)
+
 ## Project status
 
 This is an early development build. It scans selected source folders, groups files by dates and weeks, lets you review and edit the publication order, copies files and creates ZIP archives with a local recovery journal, extracts audio from video without re-encoding, and exports a versioned publication plan. Local Russian title suggestions use the selected first five or ten minutes of an SRT after the model and local inference engine are installed. This app does not send Telegram messages.
@@ -33,6 +35,8 @@ The project uses SQLite for project state and operation history. Model weights a
 ## Development
 
 See the [development guide](docs/en/development.md), [architecture overview](docs/en/architecture.md), and [release checklist](docs/release-check.md). The full accepted requirements and progress handoff are maintained separately; runtime project memory is excluded from Git.
+
+See [changelog](CHANGELOG.md) for version history and [third-party notices](THIRD_PARTY_NOTICES.md) for included component terms.
 
 ## License and permissions
 

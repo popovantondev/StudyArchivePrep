@@ -1,14 +1,9 @@
 # Changelog
 
-## Unreleased
+## 0.1.0 — 2026-09-27
 
-- Created the Study Archive Prep application shell and local project-memory workflow.
-- Added project persistence, conservative source scanning, an editable publication order, operation preflight, safe copy/ZIP processing, and lossless audio stream extraction.
-- Added resumable, checksum-pinned local Qwen model downloads and an offline llama.cpp CLI runner.
-- Added bounded 5/10-minute SRT excerpts, Russian title suggestions, variant-preserving output-name proposals, and exact-confirmation renames limited to prepared output files.
-- Added deterministic publication-plan v1 export with output hashes, safe relative paths, atomic no-overwrite write, and a public JSON Schema.
-
-## 0.1.0 — initial development scaffold
-
-- Added a localized macOS desktop setup screen for choosing source and output folders.
-- Added the accepted requirements, initial decisions, and a sequential implementation queue.
+- First development build for macOS 13+ on Apple Silicon.
+- Create local study projects, scan source folders, assign files to weeks and dates, and edit publication order.
+- Copy files, extract supported audio without re-encoding, create ZIP archives, keep an operation journal, and export `publication-plan.json`.
+- Download the pinned Qwen3-4B model on request and suggest Russian titles from SRT locally.
+- Include a macOS `.app` build script and third-party license/source notices.
