@@ -22,3 +22,5 @@ Keep unit checks deterministic, offline, and independent of real study folders, 
 ## Release
 
 Build from a reviewed, clean Git commit. Start with a new versioned output directory; do not replace an existing release. Test the actual app archive using a fresh app-data directory. Follow the release checklist and verify the full repository, archive, screenshots, third-party licenses, and checksum before publishing.
+
+Install CMake and Xcode Command Line Tools for the native components, then run `scripts/build_macos_native_tools.sh`. The script pins source revisions and verifies the FFmpeg SHA-256. Install Python build requirements with `python -m pip install -e '.[build]'`, then run `scripts/build_macos_app.sh`; the app is written to `release-build/app-dist/StudyArchivePrep.app`. Run `scripts/package_macos_release.sh` to create the ZIP and SHA-256 file without replacing an existing archive. The local ad-hoc signature is not a Developer ID signature or notarization.

@@ -291,7 +291,7 @@ class LlamaCliRunner:
                        "--file", str(prompt_path), "--n-predict", str(max_tokens),
                        "--ctx-size", "4096", "--temp", "0.1", "--seed", "0",
                        "--single-turn", "--simple-io", "--no-display-prompt",
-                       "--no-show-timings", "--no-warmup"]
+                       "--no-show-timings", "--no-warmup", "--reasoning", "off"]
             with tempfile.TemporaryFile() as stdout_file, tempfile.TemporaryFile() as stderr_file:
                 try:
                     process = subprocess.Popen(command, stdin=subprocess.DEVNULL,
@@ -322,7 +322,7 @@ class LlamaCliRunner:
                 detail = (stderr or "").strip()[-1200:]
                 raise ModelError("The local model could not generate a suggestion." +
                                  (f" {detail}" if detail else ""))
-            text = (stdout or "").strip()
+            text = _extract_cli_response(stdout or "", prompt)
             if not text:
                 raise ModelError("The local model returned an empty suggestion.")
             return GenerationResult(text, time.monotonic() - started, self.model_revision)
@@ -334,3 +334,13 @@ class LlamaCliRunner:
                 prompt_path.unlink(missing_ok=True)
             except OSError:
                 pass
+
+
+def _extract_cli_response(stdout: str, prompt: str) -> str:
+    """Remove llama-cli's startup banner and echoed prompt from simple-IO output."""
+    text = stdout
+    if prompt in text:
+        text = text.rsplit(prompt, 1)[1]
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    lines = [line for line in lines if line not in {"Exiting...", ">"}]
+    return lines[-1] if lines else ""

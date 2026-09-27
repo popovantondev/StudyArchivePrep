@@ -73,6 +73,16 @@ if os.environ.get("AUDIO_TEST_SLEEP"):
         self.assertEqual(result.audio_streams[1].title, "Alternative")
         self.assertIn("ru", result.audio_streams[1].label)
 
+    def test_probe_uses_matroska_audio_duration_tag_before_container_duration(self):
+        self.ffprobe.write_text('''#!/usr/bin/env python3
+import json
+print(json.dumps({"streams": [{"index": 1, "codec_type": "audio", "codec_name": "aac",
+    "tags": {"DURATION": "00:00:05.023000000"}}], "format": {"duration": "6.5"}}))
+''')
+        self.ffprobe.chmod(0o755)
+        result = probe_media(self.input, self.ffprobe)
+        self.assertEqual(result.audio_streams[0].duration_seconds, 5.023)
+
     def test_multiple_audio_tracks_require_an_explicit_choice(self):
         with self.assertRaises(AudioStreamSelectionRequired) as caught:
             extract_audio_lossless(self.input, self.base / "out" / "lesson", ffmpeg_path=self.ffmpeg,

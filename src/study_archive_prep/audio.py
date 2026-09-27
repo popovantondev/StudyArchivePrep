@@ -110,6 +110,18 @@ def _optional_duration(value) -> float | None:
         return None
 
 
+def _tag_duration(value) -> float | None:
+    """Read Matroska's HH:MM:SS.fraction duration tag when stream duration is absent."""
+    if not isinstance(value, str):
+        return None
+    try:
+        hours, minutes, seconds = value.split(":", 2)
+        result = int(hours) * 3600 + int(minutes) * 60 + float(seconds)
+        return result if result >= 0 else None
+    except (TypeError, ValueError):
+        return None
+
+
 def _sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as stream:
@@ -169,7 +181,8 @@ def probe_media(path: str | Path, ffprobe_path: str | Path | None = None) -> Med
                 sample_rate=_optional_int(stream.get("sample_rate")),
                 language=tags.get("language") if isinstance(tags.get("language"), str) else None,
                 title=tags.get("title") if isinstance(tags.get("title"), str) else None,
-                duration_seconds=_optional_duration(stream.get("duration")) or format_duration,
+                duration_seconds=(_optional_duration(stream.get("duration"))
+                                  or _tag_duration(tags.get("DURATION")) or format_duration),
             ))
         if not isinstance(streams, list):
             raise ValueError("stream list is invalid")

@@ -22,3 +22,5 @@ Unit-Tests müssen deterministisch, offline und unabhängig von echten Lernordne
 ## Release
 
 Aus einem geprüften, sauberen Git-Commit bauen. Für jede Version einen neuen Ausgabeordner verwenden und frühere Releases nicht ersetzen. Das fertige App-Archiv mit einem neuen Datenordner prüfen. Vor der Veröffentlichung Repository, Archiv, Screenshots, Drittanbieter-Lizenzen und Prüfsumme kontrollieren.
+
+Für die nativen Komponenten CMake und Xcode Command Line Tools installieren und `scripts/build_macos_native_tools.sh` ausführen. Das Skript pinnt Quellversionen und prüft die SHA-256-Prüfsumme von FFmpeg. Python-Build-Abhängigkeiten mit `python -m pip install -e '.[build]'` installieren und anschließend `scripts/build_macos_app.sh` starten. Das Ergebnis liegt unter `release-build/app-dist/StudyArchivePrep.app`. `scripts/package_macos_release.sh` erstellt das ZIP und seine SHA-256-Datei, ohne einen vorhandenen Release zu überschreiben. Die lokale Ad-hoc-Signatur ist keine Developer-ID-Signatur und keine notarialisierte Freigabe.

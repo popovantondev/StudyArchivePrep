@@ -6,6 +6,8 @@ macOS 13 oder neuer · Apple Silicon · Version 0.1.0
 
 Study Archive Prep ordnet Lernmaterial nach Datum, hilft bei der Prüfung von Aufnahmen und Untertiteln und erstellt einen Veröffentlichungsplan für Telegram Media Sender.
 
+![Arbeitsbereich mit synthetischem Beispielprojekt](../images/study-archive-prep-workspace.png)
+
 ## Projektstatus
 
 Dies ist eine frühe Entwicklungsversion. Die App scannt ausgewählte Quellordner, ordnet Dateien nach Datum und Woche, lässt die Veröffentlichungsreihenfolge prüfen und bearbeiten, kopiert Dateien und erstellt ZIP-Archive mit Wiederherstellungsjournal, extrahiert Ton ohne Neukodierung und exportiert einen versionierten Veröffentlichungsplan. Für russische lokale Titelvorschläge werden die ersten fünf oder zehn Minuten einer ausgewählten SRT-Datei analysiert; Modell und lokale Laufzeit müssen installiert sein. Die App sendet keine Telegram-Nachrichten.

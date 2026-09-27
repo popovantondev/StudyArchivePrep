@@ -64,6 +64,7 @@ class TitleProposalTests(unittest.TestCase):
         prompt = build_title_prompt(SubtitleExcerpt("Pflanzen und ihre Wirkung", 1, 300, False),
                                     source_language="de")
         self.assertIn("короткое русское название", prompt)
+        self.assertIn("переведи смысл на русский", prompt.casefold())
         self.assertIn("2–7 слов", prompt)
         self.assertIn("Pflanzen und ihre Wirkung", prompt)
         self.assertIn("Язык субтитров: de", prompt)
@@ -76,6 +77,7 @@ class TitleProposalTests(unittest.TestCase):
         self.assertEqual(sanitize_russian_title("Предложенное название: «Мазь из листьев подорожника.»"),
                          "Мазь из листьев подорожника")
         self.assertIsNone(sanitize_russian_title("How plants heal"))
+        self.assertIsNone(sanitize_russian_title("Wundsalbe из подорожника"))
         self.assertIsNone(sanitize_russian_title("Одно"))
         self.assertIsNone(sanitize_russian_title("Название\nи второй ответ"))
         self.assertIsNone(sanitize_russian_title("Мазь / опасный путь"))
