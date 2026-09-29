@@ -1,5 +1,7 @@
 # Study Archive Prep
 
+[Руководство пользователя](https://popovantondev.github.io/StudyArchivePrep/Guide-ru.html)
+
 **[Русский](README.md) · [Deutsch](../de/README.md) · [English](../../README.md)**
 
 macOS 13 или новее · Apple Silicon · Версия 0.1.0
