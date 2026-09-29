@@ -6,7 +6,7 @@ macOS 13 or newer · Apple Silicon · Version 0.1.0
 
 Study Archive Prep organizes study files into dated folders, helps review recordings and subtitles, and prepares an ordered publication plan for Telegram Media Sender.
 
-![Study Archive Prep workspace with a synthetic demo project](docs/images/study-archive-prep-workspace.png)
+![Screenshot of the synthetic demo in the Russian-language interface; the same image is used in all language guides, and separate localized screenshots are not available](docs/images/study-archive-prep-workspace.png)
 
 ## Project status
 
