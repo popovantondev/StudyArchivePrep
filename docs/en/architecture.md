@@ -2,7 +2,7 @@
 
 The application is split into a Qt interface and testable Python modules for project state, scanning, file processing, title suggestions, persistence, and publication-plan export. Long-running scans and media operations run away from the UI thread.
 
-The accepted behavior is defined in `docs/PLAN.md`. Implement one task from the local `.work-memory/TASKS.md` queue at a time. Project files and logs remain in local application data; synthetic fixtures are used by automated tests.
+The accepted behavior is defined in `docs/PLAN.md`. Project files and logs remain in local application data; synthetic fixtures are used by automated tests.
 
 After project setup, a dedicated workspace shows the ordered week/day tree and files that still need assignment. Users can add week/day groups, assign unresolved files, move and reorder blocks, edit publication text, and include or exclude files. Scans, audio extraction, title inference, and journaled copy/archive preparation run outside the UI thread. Extracted audio is stored under private app data and represented as a project source; the original video is kept and excluded from the prepared queue.
 
