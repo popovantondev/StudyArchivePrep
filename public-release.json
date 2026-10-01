@@ -1,0 +1,53 @@
+{
+  "name": "Study Archive Prep",
+  "version": "0.1.0",
+  "platform": "macOS 13+ · Apple Silicon",
+  "tag": null,
+  "description": {
+    "ru": "Организует учебные материалы по датам, извлекает аудио и готовит порядок публикации для Telegram Media Sender.",
+    "de": "Ordnet Lernmaterial nach Datum, extrahiert Audio und bereitet die Reihenfolge für Telegram Media Sender vor.",
+    "en": "Organize study materials by date, extract audio and prepare a publication order for Telegram Media Sender."
+  },
+  "requirements": {
+    "ru": "Ранняя разработка: доступны исходники, готового установочного пакета нет. Python 3.12; локальная модель и движок для подсказок заголовков устанавливаются отдельно.",
+    "de": "Frühe Entwicklung: nur Quellcode, kein fertiges Installationspaket. Python 3.12; lokales Modell und Engine für Titelvorschläge separat einrichten.",
+    "en": "Early development: source only, no ready-to-install package. Python 3.12; set up the local model and engine separately for title suggestions."
+  },
+  "start": {
+    "ru": "Откройте руководство запуска из исходников. Программа сама не отправляет материалы в Telegram.",
+    "de": "Die Anleitung zum Start aus dem Quellcode lesen. Die App sendet selbst keine Materialien an Telegram.",
+    "en": "Follow the source setup guide. This app does not send materials to Telegram itself."
+  },
+  "schema_version": 1,
+  "repo": "StudyArchivePrep",
+  "source_url": "https://github.com/popovantondev/StudyArchivePrep",
+  "readmes": {
+    "en": [
+      "README.md"
+    ],
+    "de": [
+      "docs/de/README.md"
+    ],
+    "ru": [
+      "docs/ru/README.md"
+    ]
+  },
+  "guides": {
+    "ru": "Guide-ru.html",
+    "de": "Guide-de.html",
+    "en": "Guide-en.html"
+  },
+  "help_url": "https://popovantondev.github.io/StudyArchivePrep/Guide-{lang}.html",
+  "feedback_url": "https://github.com/popovantondev/StudyArchivePrep/issues/new/choose",
+  "status": "source",
+  "release_url": null,
+  "assets": [],
+  "downloads": [],
+  "checksums": [],
+  "version_files": [
+    {
+      "path": "pyproject.toml",
+      "pattern": "^version\\s*=\\s*\"([^\"]+)\""
+    }
+  ]
+}
