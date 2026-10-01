@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Prepare dated study materials and ordered Telegram publication plans"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"
-dependencies = ["PySide6==6.10.2"]
+dependencies = ["PySide6==6.11.2"]
 
 [project.optional-dependencies]
 build = ["pyinstaller==6.19.0"]
