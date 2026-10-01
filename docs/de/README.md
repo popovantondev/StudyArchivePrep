@@ -1,6 +1,16 @@
 # Study Archive Prep
 
-[Benutzerhandbuch](https://popovantondev.github.io/StudyArchivePrep/Guide-de.html)
+<!-- public-release:start -->
+Ordnet Lernmaterial nach Datum, extrahiert Audio und bereitet die Reihenfolge für Telegram Media Sender vor.
+
+**macOS 13+ · Apple Silicon · Nur Quellcode 0.1.0**
+
+**[Quellcode](https://github.com/popovantondev/StudyArchivePrep)** · **[Anleitung](https://popovantondev.github.io/StudyArchivePrep/Guide-de.html)** · **[Fehler melden](https://github.com/popovantondev/StudyArchivePrep/issues/new/choose)**
+
+**Voraussetzungen und Grenzen:** Frühe Entwicklung: nur Quellcode, kein fertiges Installationspaket. Python 3.12; lokales Modell und Engine für Titelvorschläge separat einrichten.
+
+**Erste Schritte:** Die Anleitung zum Start aus dem Quellcode lesen. Die App sendet selbst keine Materialien an Telegram.
+<!-- public-release:end -->
 
 **[Русский](../ru/README.md) · [Deutsch](README.md) · [English](../../README.md)**
 
