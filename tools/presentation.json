@@ -1,0 +1,33 @@
+{
+  "folder": ".",
+  "shots": {
+    "ru": "docs/images/study-archive-prep-workspace.png",
+    "de": "docs/images/study-archive-prep-workspace.png",
+    "en": "docs/images/study-archive-prep-workspace.png"
+  },
+  "icon": "presentation-icon.svg",
+  "palette": {
+    "accent": "#276c65",
+    "tint": "#e8f3ef",
+    "hero": "#183d39",
+    "hero-end": "#3f7268"
+  },
+  "flow": {
+    "ru": [
+      "Настроить исходники",
+      "Подготовить материалы",
+      "Упорядочить архив"
+    ],
+    "de": [
+      "Quellcode einrichten",
+      "Material vorbereiten",
+      "Archiv ordnen"
+    ],
+    "en": [
+      "Set up the source",
+      "Prepare materials",
+      "Organize the archive"
+    ]
+  },
+  "caption": "study"
+}
