@@ -6,9 +6,19 @@
     "en": "docs/images/study-archive-prep-workspace.png"
   },
   "icon": "presentation-icon.svg",
+  "stack": "Python · PySide6",
+  "caption": "study",
+  "source_note": false,
   "palette": {
     "accent": "#276c65",
     "tint": "#e8f3ef",
+    "hero": "#183d39",
+    "hero-end": "#3f7268"
+  },
+  "palette_dark": {
+    "accent": "#6fcbb8",
+    "accent-ink": "#06211c",
+    "tint": "#12302c",
     "hero": "#183d39",
     "hero-end": "#3f7268"
   },
@@ -29,5 +39,156 @@
       "Organize the archive"
     ]
   },
-  "caption": "study"
+  "bento": {
+    "de": {
+      "inst_text": "Die Schritte aus „Aus den Quellen starten“ in der Anleitung (Python 3.12, macOS).",
+      "term": [
+        [
+          "ps",
+          "python3.12 -m venv .venv"
+        ],
+        [
+          "ps",
+          "source .venv/bin/activate"
+        ],
+        [
+          "ps",
+          "python -m pip install -r requirements.txt"
+        ],
+        [
+          "ps",
+          "python -m pip install -e ."
+        ],
+        [
+          "ok",
+          "study-archive-prep"
+        ],
+        [
+          "dim",
+          "# Getrennte UI-Vorschau: study-archive-prep --data-dir /tmp/study-archive-prep-preview"
+        ]
+      ],
+      "tile": {
+        "title": "Ihre Daten",
+        "text": "Dateien werden nicht hochgeladen. Das Modell für die Titelvorschläge wird nur nach einem ausdrücklichen Klick heruntergeladen.",
+        "live": "Läuft lokal"
+      },
+      "features": [
+        "Quellordner scannen",
+        "Nach Datum und Woche gruppieren",
+        "Veröffentlichungsreihenfolge bearbeiten",
+        "Dateien kopieren, ZIP mit Wiederherstellungsjournal",
+        "Audio ohne Neukodierung extrahieren",
+        "Versionierter Veröffentlichungsplan",
+        "Lokale russische Titelvorschläge aus SRT",
+        "Originale bleiben erhalten"
+      ],
+      "checks": [
+        "Automatische Prüfungen auf GitHub Actions (macOS 15): Kompilieren, 14 Testdateien, Wheel-Build",
+        "Prüfbericht der Entwicklungsversion (docs/releases/0.1.0-validation.md)",
+        "Version {v} mit Änderungsprotokoll (CHANGELOG)",
+        "Anleitung auf Deutsch, Englisch und Russisch"
+      ]
+    },
+    "en": {
+      "inst_text": "The steps from “Run from source” in the guide (Python 3.12, macOS).",
+      "term": [
+        [
+          "ps",
+          "python3.12 -m venv .venv"
+        ],
+        [
+          "ps",
+          "source .venv/bin/activate"
+        ],
+        [
+          "ps",
+          "python -m pip install -r requirements.txt"
+        ],
+        [
+          "ps",
+          "python -m pip install -e ."
+        ],
+        [
+          "ok",
+          "study-archive-prep"
+        ],
+        [
+          "dim",
+          "# Isolated UI preview: study-archive-prep --data-dir /tmp/study-archive-prep-preview"
+        ]
+      ],
+      "tile": {
+        "title": "Your data",
+        "text": "Files are not uploaded. The model for title suggestions is downloaded only after an explicit click.",
+        "live": "Runs locally"
+      },
+      "features": [
+        "Scan source folders",
+        "Group by date and week",
+        "Edit the publication order",
+        "Copy files, ZIP with a recovery journal",
+        "Extract audio without re-encoding",
+        "Versioned publication plan",
+        "Local Russian title suggestions from SRT",
+        "Originals are kept"
+      ],
+      "checks": [
+        "Automatic checks on GitHub Actions (macOS 15): compile, 14 test files, wheel build",
+        "Validation report of the development build (docs/releases/0.1.0-validation.md)",
+        "Version {v} with changelog",
+        "Guide in German, English and Russian"
+      ]
+    },
+    "ru": {
+      "inst_text": "Шаги из раздела «Запуск из исходников» руководства (Python 3.12, macOS).",
+      "term": [
+        [
+          "ps",
+          "python3.12 -m venv .venv"
+        ],
+        [
+          "ps",
+          "source .venv/bin/activate"
+        ],
+        [
+          "ps",
+          "python -m pip install -r requirements.txt"
+        ],
+        [
+          "ps",
+          "python -m pip install -e ."
+        ],
+        [
+          "ok",
+          "study-archive-prep"
+        ],
+        [
+          "dim",
+          "# Отдельный просмотр интерфейса: study-archive-prep --data-dir /tmp/study-archive-prep-preview"
+        ]
+      ],
+      "tile": {
+        "title": "Ваши данные",
+        "text": "Файлы не загружаются. Модель для подсказок заголовков скачивается только после явного нажатия кнопки.",
+        "live": "Работает локально"
+      },
+      "features": [
+        "Сканирование исходных папок",
+        "Группировка по датам и неделям",
+        "Правка порядка публикации",
+        "Копирование файлов, ZIP с журналом восстановления",
+        "Извлечение звука без перекодирования",
+        "Версионируемый план публикации",
+        "Локальные подсказки русских заголовков по SRT",
+        "Оригиналы сохраняются"
+      ],
+      "checks": [
+        "Автоматические проверки в GitHub Actions (macOS 15): компиляция, 14 файлов тестов, сборка wheel",
+        "Отчёт о проверке сборки разработки (docs/releases/0.1.0-validation.md)",
+        "Версия {v} и журнал изменений",
+        "Руководство на немецком, английском и русском"
+      ]
+    }
+  }
 }

@@ -1,32 +1,32 @@
 # Study Archive Prep
 
 <!-- public-release:start -->
-Organize study materials by date, extract audio and prepare a publication order for Telegram Media Sender.
+Ordnet Lernmaterial nach Datum, extrahiert Audio und bereitet die Reihenfolge für Telegram Media Sender vor.
 
-**macOS 13+ · Apple Silicon · Source only 0.1.0**
+**macOS 13+ · Apple Silicon · Nur Quellcode 0.1.0**
 
-**[Source](https://github.com/popovantondev/StudyArchivePrep)** · **[User guide](https://popovantondev.github.io/StudyArchivePrep/Guide-en.html)** · **[Report a problem](https://github.com/popovantondev/StudyArchivePrep/issues/new/choose)**
+**[Quellcode](https://github.com/popovantondev/StudyArchivePrep)** · **[Anleitung](https://popovantondev.github.io/StudyArchivePrep/Guide-de.html)** · **[Fehler melden](https://github.com/popovantondev/StudyArchivePrep/issues/new/choose)**
 
-**Requirements and limitations:** Early development: source only, no ready-to-install package. Python 3.12; set up the local model and engine separately for title suggestions.
+**Voraussetzungen und Grenzen:** Frühe Entwicklung: nur Quellcode, kein fertiges Installationspaket. Python 3.12; lokales Modell und Engine für Titelvorschläge separat einrichten.
 
-**First steps:** Follow the source setup guide. This app does not send materials to Telegram itself.
+**Erste Schritte:** Die Anleitung zum Start aus dem Quellcode lesen. Die App sendet selbst keine Materialien an Telegram.
 <!-- public-release:end -->
 
-**[Русский](docs/ru/README.md) · [Deutsch](docs/de/README.md) · [English](README.md)**
+**[Deutsch](README.md) · [Русский](README.ru.md) · [English](README.en.md)**
 
-macOS 13 or newer · Apple Silicon · Version 0.1.0
+macOS 13 oder neuer · Apple Silicon · Version 0.1.0
 
-Study Archive Prep organizes study files into dated folders, helps review recordings and subtitles, and prepares an ordered publication plan for Telegram Media Sender.
+Study Archive Prep ordnet Lernmaterial nach Datum, hilft bei der Prüfung von Aufnahmen und Untertiteln und erstellt einen Veröffentlichungsplan für Telegram Media Sender.
 
-![Screenshot of the synthetic demo in the Russian-language interface; the same image is used in all language guides, and separate localized screenshots are not available](docs/images/study-archive-prep-workspace.png)
+![Screenshot des synthetischen Beispiels in der russischsprachigen Oberfläche; dasselbe Bild wird in allen Sprachfassungen verwendet, separate lokalisierte Screenshots sind nicht verfügbar](docs/images/study-archive-prep-workspace.png)
 
-## Project status
+## Projektstatus
 
-This is an early development build. It scans selected source folders, groups files by dates and weeks, lets you review and edit the publication order, copies files and creates ZIP archives with a local recovery journal, extracts audio from video without re-encoding, and exports a versioned publication plan. Local Russian title suggestions use the selected first five or ten minutes of an SRT after the model and local inference engine are installed. This app does not send Telegram messages.
+Dies ist eine frühe Entwicklungsversion. Die App scannt ausgewählte Quellordner, ordnet Dateien nach Datum und Woche, lässt die Veröffentlichungsreihenfolge prüfen und bearbeiten, kopiert Dateien und erstellt ZIP-Archive mit Wiederherstellungsjournal, extrahiert Ton ohne Neukodierung und exportiert einen versionierten Veröffentlichungsplan. Für russische lokale Titelvorschläge werden die ersten fünf oder zehn Minuten einer ausgewählten SRT-Datei analysiert; Modell und lokale Laufzeit müssen installiert sein. Die App sendet keine Telegram-Nachrichten.
 
-## Run from source
+## Aus den Quellen starten
 
-Requires Python 3.12 and macOS.
+Benötigt Python 3.12 unter macOS.
 
 ```bash
 python3.12 -m venv .venv
@@ -36,20 +36,18 @@ python -m pip install -e .
 study-archive-prep
 ```
 
-For an isolated UI preview, pass `--data-dir /tmp/study-archive-prep-preview`. The option redirects local app settings and project data.
+Für eine getrennte UI-Vorschau `--data-dir /tmp/study-archive-prep-preview` angeben. Damit werden lokale Einstellungen und App-Daten umgeleitet.
 
-## Safety and privacy
+## Datensicherheit und Datenschutz
 
-Source folders are selected by the user and scanned locally when a project is created or rescanned. Processing writes to a separate output folder, uses temporary files and a private recovery journal, and does not replace existing files. Extracted audio is kept in private app data before it is copied to the prepared output. Original recordings are retained. No files are uploaded by this application. Never add study files, subtitle text, personal paths, local projects, model weights, account credentials, or runtime logs to Git.
+Quellordner werden beim Erstellen eines Projekts oder nach einem erneuten Scan lokal untersucht. Die Ausgabe wird getrennt gespeichert; temporäre Dateien und ein privates Wiederherstellungsjournal schützen bestehende Dateien vor Überschreiben. Extrahierter Ton wird zunächst in privaten App-Daten gespeichert und danach in die vorbereitete Ausgabe kopiert. Originalaufnahmen bleiben erhalten. Dateien werden nicht ins Internet hochgeladen. Lernmaterial, Untertiteltexte, private Pfade, lokale Projekte, Modellgewichte, Kontodaten und Laufzeitprotokolle gehören nicht in Git.
 
-The project uses SQLite for project state and operation history. Model weights are downloaded only after the user asks for them and are not stored in this repository. See the [rights and third-party notices](THIRD_PARTY_NOTICES.md).
+Die Anwendung verwendet SQLite für Projektstatus und Operationsverlauf. Modellgewichte werden nur nach einem ausdrücklichen Klick heruntergeladen und nicht im Repository gespeichert. Siehe [Rechte und Hinweise zu Drittsoftware](THIRD_PARTY_NOTICES.md).
 
-## Development
+## Entwicklung
 
-See the [development guide](docs/en/development.md), [architecture overview](docs/en/architecture.md), and [release checklist](docs/release-check.md). The full accepted requirements and progress handoff are maintained separately; runtime project memory is excluded from Git.
+Siehe die [Entwicklungsanleitung](docs/de/development.md), den [Architekturüberblick](docs/de/architecture.md) und die [Release-Prüfliste](docs/release-check.md).
 
-See [changelog](CHANGELOG.md) for version history and [third-party notices](THIRD_PARTY_NOTICES.md) for included component terms.
+## Rechte und Erlaubnisse
 
-## License and permissions
-
-The project owner's code remains under the rights stated in `RIGHTS.md`; no license for reuse is granted by public visibility alone. Third-party software and model licenses remain applicable.
+Der eigene Quellcode unterliegt den Bedingungen in `RIGHTS.md`. Öffentliche Sichtbarkeit gewährt keine Erlaubnis zur Wiederverwendung. Für Drittsoftware und das Modell gelten deren eigene Lizenzen.

@@ -23,13 +23,13 @@
   "source_url": "https://github.com/popovantondev/StudyArchivePrep",
   "readmes": {
     "en": [
-      "README.md"
+      "README.en.md"
     ],
     "de": [
-      "docs/de/README.md"
+      "README.md"
     ],
     "ru": [
-      "docs/ru/README.md"
+      "README.ru.md"
     ]
   },
   "guides": {
