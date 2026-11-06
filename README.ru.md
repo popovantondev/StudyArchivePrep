@@ -1,6 +1,10 @@
+<div align="center">
+  <img src="presentation-icon.svg" width="128" alt="Значок Study Archive Prep">
+</div>
+
 # Study Archive Prep
 
-**[Deutsch](README.md) · [Русский](README.ru.md) · [English](README.en.md)**
+**Русский** · [Deutsch](README.md) · [English](README.en.md)
 
 <!-- public-release:start -->
 Организует учебные материалы по датам, извлекает аудио и готовит порядок публикации для Telegram Media Sender.
@@ -14,11 +18,11 @@
 **Первые шаги:** Откройте руководство запуска из исходников. Программа сама не отправляет материалы в Telegram.
 <!-- public-release:end -->
 
-macOS 13 или новее · Apple Silicon · Версия 0.1.0
-
-Study Archive Prep раскладывает учебные материалы по датам, помогает проверить записи и субтитры и готовит порядок публикации для Telegram Media Sender.
+**[Сайт](https://popovantondev.github.io/StudyArchivePrep/index-ru.html)**
 
 ![Скриншот синтетического примера в русскоязычном интерфейсе](docs/images/study-archive-prep-workspace-ru.png)
+
+Study Archive Prep раскладывает учебные материалы по датам, помогает проверить записи и субтитры и готовит порядок публикации для Telegram Media Sender.
 
 ## Состояние проекта
 

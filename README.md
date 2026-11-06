@@ -1,6 +1,10 @@
+<div align="center">
+  <img src="presentation-icon.svg" width="128" alt="Study Archive Prep Symbol">
+</div>
+
 # Study Archive Prep
 
-**[Deutsch](README.md) · [Русский](README.ru.md) · [English](README.en.md)**
+[Русский](README.ru.md) · **Deutsch** · [English](README.en.md)
 
 <!-- public-release:start -->
 Ordnet Lernmaterial nach Datum, extrahiert Audio und bereitet die Reihenfolge für Telegram Media Sender vor.
@@ -14,11 +18,11 @@ Ordnet Lernmaterial nach Datum, extrahiert Audio und bereitet die Reihenfolge f�
 **Erste Schritte:** Die Anleitung zum Start aus dem Quellcode lesen. Die App sendet selbst keine Materialien an Telegram.
 <!-- public-release:end -->
 
-macOS 13 oder neuer · Apple Silicon · Version 0.1.0
-
-Study Archive Prep ordnet Lernmaterial nach Datum, hilft bei der Prüfung von Aufnahmen und Untertiteln und erstellt einen Veröffentlichungsplan für Telegram Media Sender.
+**[Webseite](https://popovantondev.github.io/StudyArchivePrep/)**
 
 ![Screenshot des synthetischen Beispiels in der deutschsprachigen Oberfläche](docs/images/study-archive-prep-workspace-de.png)
+
+Study Archive Prep ordnet Lernmaterial nach Datum, hilft bei der Prüfung von Aufnahmen und Untertiteln und erstellt einen Veröffentlichungsplan für Telegram Media Sender.
 
 ## Projektstatus
 

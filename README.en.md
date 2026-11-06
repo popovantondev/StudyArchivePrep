@@ -1,6 +1,10 @@
+<div align="center">
+  <img src="presentation-icon.svg" width="128" alt="Study Archive Prep icon">
+</div>
+
 # Study Archive Prep
 
-**[Deutsch](README.md) · [Русский](README.ru.md) · [English](README.en.md)**
+[Русский](README.ru.md) · [Deutsch](README.md) · **English**
 
 <!-- public-release:start -->
 Organize study materials by date, extract audio and prepare a publication order for Telegram Media Sender.
@@ -14,11 +18,11 @@ Organize study materials by date, extract audio and prepare a publication order 
 **First steps:** Follow the source setup guide. This app does not send materials to Telegram itself.
 <!-- public-release:end -->
 
-macOS 13 or newer · Apple Silicon · Version 0.1.0
-
-Study Archive Prep organizes study files into dated folders, helps review recordings and subtitles, and prepares an ordered publication plan for Telegram Media Sender.
+**[Website](https://popovantondev.github.io/StudyArchivePrep/index-en.html)**
 
 ![Screenshot of the synthetic demo in the English-language interface](docs/images/study-archive-prep-workspace-en.png)
+
+Study Archive Prep organizes study files into dated folders, helps review recordings and subtitles, and prepares an ordered publication plan for Telegram Media Sender.
 
 ## Project status
 
