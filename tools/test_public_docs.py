@@ -91,7 +91,8 @@ class LocalizedScreenshotTests(unittest.TestCase):
                 shots = re.findall(r'<img\b[^>]*study-archive-prep-workspace[^>]*>', text)
                 self.assertTrue(shots, page)
                 for tag in shots:
-                    self.assertIn('src="' + wanted + '"', tag, page)
+                    # The page shows the original or its right-sized WebP copy (assets/web/<name>.<hash>.webp).
+                    self.assertRegex(tag, r'src="(?:' + re.escape(wanted) + r'|assets/web/study-archive-prep-workspace-' + lang + r'\.[0-9a-f]{8}\.webp)"', page)
                     self.assertRegex(tag, r'width="\d+"')
                     self.assertRegex(tag, r'height="\d+"')
                 self.assertNotIn('raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/images/study-archive-prep-workspace', text, page)
