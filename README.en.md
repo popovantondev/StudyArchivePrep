@@ -1,5 +1,7 @@
 # Study Archive Prep
 
+**[Deutsch](README.md) · [Русский](README.ru.md) · [English](README.en.md)**
+
 <!-- public-release:start -->
 Organize study materials by date, extract audio and prepare a publication order for Telegram Media Sender.
 
@@ -11,8 +13,6 @@ Organize study materials by date, extract audio and prepare a publication order 
 
 **First steps:** Follow the source setup guide. This app does not send materials to Telegram itself.
 <!-- public-release:end -->
-
-**[Deutsch](README.md) · [Русский](README.ru.md) · [English](README.en.md)**
 
 macOS 13 or newer · Apple Silicon · Version 0.1.0
 

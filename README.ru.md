@@ -1,5 +1,7 @@
 # Study Archive Prep
 
+**[Deutsch](README.md) · [Русский](README.ru.md) · [English](README.en.md)**
+
 <!-- public-release:start -->
 Организует учебные материалы по датам, извлекает аудио и готовит порядок публикации для Telegram Media Sender.
 
@@ -11,8 +13,6 @@
 
 **Первые шаги:** Откройте руководство запуска из исходников. Программа сама не отправляет материалы в Telegram.
 <!-- public-release:end -->
-
-**[Deutsch](README.md) · [Русский](README.ru.md) · [English](README.en.md)**
 
 macOS 13 или новее · Apple Silicon · Версия 0.1.0
 

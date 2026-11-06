@@ -1,5 +1,7 @@
 # Study Archive Prep
 
+**[Deutsch](README.md) · [Русский](README.ru.md) · [English](README.en.md)**
+
 <!-- public-release:start -->
 Ordnet Lernmaterial nach Datum, extrahiert Audio und bereitet die Reihenfolge für Telegram Media Sender vor.
 
@@ -11,8 +13,6 @@ Ordnet Lernmaterial nach Datum, extrahiert Audio und bereitet die Reihenfolge f�
 
 **Erste Schritte:** Die Anleitung zum Start aus dem Quellcode lesen. Die App sendet selbst keine Materialien an Telegram.
 <!-- public-release:end -->
-
-**[Deutsch](README.md) · [Русский](README.ru.md) · [English](README.en.md)**
 
 macOS 13 oder neuer · Apple Silicon · Version 0.1.0
 
