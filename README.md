@@ -18,7 +18,7 @@ macOS 13 oder neuer · Apple Silicon · Version 0.1.0
 
 Study Archive Prep ordnet Lernmaterial nach Datum, hilft bei der Prüfung von Aufnahmen und Untertiteln und erstellt einen Veröffentlichungsplan für Telegram Media Sender.
 
-![Screenshot des synthetischen Beispiels in der russischsprachigen Oberfläche; dasselbe Bild wird in allen Sprachfassungen verwendet, separate lokalisierte Screenshots sind nicht verfügbar](docs/images/study-archive-prep-workspace.png)
+![Screenshot des synthetischen Beispiels in der deutschsprachigen Oberfläche](docs/images/study-archive-prep-workspace-de.png)
 
 ## Projektstatus
 

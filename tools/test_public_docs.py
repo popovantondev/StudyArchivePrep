@@ -77,4 +77,23 @@ class NetworkRetryTests(unittest.TestCase):
                 docs.fetch_bytes('https://example.invalid')
             self.assertEqual(request.call_count, 3)
 
+class LocalizedScreenshotTests(unittest.TestCase):
+    """Landing page and guide of each language show that language's own program screenshot."""
+    REPO = Path(__file__).resolve().parents[1]
+    PAGES = {'ru': ('index-ru.html', 'Guide-ru.html'), 'de': ('index.html', 'Guide-de.html'), 'en': ('index-en.html', 'Guide-en.html')}
+    def test_each_page_uses_its_language_screenshot(self):
+        import re
+        for lang, pages in self.PAGES.items():
+            wanted = 'docs/images/study-archive-prep-workspace-' + lang + '.png'
+            self.assertTrue((self.REPO / wanted).is_file(), wanted)
+            for page in pages:
+                text = (self.REPO / page).read_text(encoding='utf-8')
+                shots = re.findall(r'<img\b[^>]*study-archive-prep-workspace[^>]*>', text)
+                self.assertTrue(shots, page)
+                for tag in shots:
+                    self.assertIn('src="' + wanted + '"', tag, page)
+                    self.assertRegex(tag, r'width="\d+"')
+                    self.assertRegex(tag, r'height="\d+"')
+                self.assertNotIn('raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/images/study-archive-prep-workspace', text, page)
+
 if __name__=='__main__':unittest.main()

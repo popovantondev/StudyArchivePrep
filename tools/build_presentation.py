@@ -24,7 +24,7 @@ TEXT = {
         feat='Функции', checks='Проверено', release='Выпуск', preview='Предварительная версия', only='Только исходники',
         shot='Демонстрационный интерфейс с искусственными данными. Открыть изображение целиком.',
         illustration='Демонстрационная иллюстрация, не снимок работающей программы. Открыть целиком.',
-        study='Демонстрация рабочего пространства на русском; локализованные снимки пока не опубликованы.',
+        study='Рабочее окно программы на русском: учебный пример с искусственными данными.',
         source_note='Готового установочного пакета нет. Инструкции описывают настройку из исходников.',
         toc='Содержание', full='Открыть изображение целиком'),
     'de': dict(
@@ -35,7 +35,7 @@ TEXT = {
         inst='Installation', feat='Funktionen', checks='Geprüft', release='Release', preview='Vorabversion', only='Nur Quellcode',
         shot='Demo-Oberfläche mit künstlichen Daten. Vollständiges Bild öffnen.',
         illustration='Demo-Illustration, kein Screenshot der laufenden Anwendung. Vollständig öffnen.',
-        study='Demo-Arbeitsbereich auf Russisch; lokalisierte Ansichten sind noch nicht veröffentlicht.',
+        study='Arbeitsfenster des Programms auf Deutsch: Lernbeispiel mit künstlichen Daten.',
         source_note='Kein fertiges Installationspaket. Die Anleitung beschreibt die Einrichtung aus dem Quellcode.',
         toc='Inhalt', full='Vollständiges Bild öffnen'),
     'en': dict(
@@ -46,7 +46,7 @@ TEXT = {
         feat='Features', checks='Checked', release='Release', preview='Preview', only='Source only',
         shot='Demonstration interface with artificial data. Open the full image.',
         illustration='Demonstration illustration, not a screenshot of the running application. Open in full.',
-        study='Demonstration workspace in Russian; localized screenshots have not been published yet.',
+        study='Program workspace in English: a study example with artificial data.',
         source_note='No ready-to-install package. The guide explains how to set up the source version.',
         toc='Contents', full='Open the full image'),
 }
@@ -107,6 +107,14 @@ def footer_html(d, lang):
         f'<footer class="ppk-footer">\n  <span>© 2026 Anton Popov · {e(d["name"])} {e(d["version"])}</span>\n'
         f'  <nav aria-label="{e(t["legal"])}"><a href="{PROFILE}impressum.html">Impressum</a>'
         f'<a href="{PROFILE}datenschutz.html">Datenschutz</a><a href="{e(d["source_url"])}">GitHub</a></nav>\n</footer>')
+
+
+def png_size(path):
+    """Width and height from the PNG header (for width/height attributes)."""
+    import struct
+    with open(path, 'rb') as f:
+        head = f.read(24)
+    return struct.unpack('>II', head[16:24])
 
 
 def head_assets(cfg, rel=''):
@@ -193,6 +201,7 @@ def landing_html(cfg, d, lang):
     target = d['release_url'] if ready else d['source_url']
     caption = t[cfg.get('caption', 'shot')]
     shot = cfg['shots'][lang]
+    shot_w, shot_h = png_size(ROOT / cfg['folder'] / shot)
     flow = ''.join('<li>' + e(x) + '</li>' for x in cfg['flow'][lang])
     extra = cfg.get('notice', {}).get(lang, '')
     if not ready and cfg.get('source_note', True):
@@ -231,7 +240,7 @@ def landing_html(cfg, d, lang):
 {notice}
 </div>
 <figure class="ppk-preview">
-<div class="ppk-stage"><a href="{e(shot)}"><img src="{e(shot)}" alt="{e(d['name'])} — {e(caption)}" decoding="async"></a></div>
+<div class="ppk-stage"><a href="{e(shot)}"><img src="{e(shot)}" alt="{e(d['name'])} — {e(caption)}" width="{shot_w}" height="{shot_h}" decoding="async"></a></div>
 <figcaption>{e(caption)}</figcaption>
 </figure>
 </div>

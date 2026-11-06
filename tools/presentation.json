@@ -1,9 +1,9 @@
 {
   "folder": ".",
   "shots": {
-    "ru": "docs/images/study-archive-prep-workspace.png",
-    "de": "docs/images/study-archive-prep-workspace.png",
-    "en": "docs/images/study-archive-prep-workspace.png"
+    "ru": "docs/images/study-archive-prep-workspace-ru.png",
+    "de": "docs/images/study-archive-prep-workspace-de.png",
+    "en": "docs/images/study-archive-prep-workspace-en.png"
   },
   "icon": "presentation-icon.svg",
   "stack": "Python · PySide6",
