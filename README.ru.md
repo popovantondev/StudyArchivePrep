@@ -1,10 +1,24 @@
-<div align="center">
-  <img src="presentation-icon.svg" width="128" alt="Значок Study Archive Prep">
-</div>
+<!-- ppk-readme:head:start -->
+<a href="https://popovantondev.github.io/StudyArchivePrep/index-ru.html"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/header-ru-dark.64f54970.svg"><img src="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/header-ru-light.76f94af0.svg" width="880" height="188" alt="Study Archive Prep — Организует учебные материалы по датам и извлекает аудио. macOS 13+ · Apple Silicon, Только исходники 0.1.0"></picture></a>
+<!-- ppk-readme:head:end -->
 
 # Study Archive Prep
 
 **Русский** · [Deutsch](README.md) · [English](README.en.md)
+
+<!-- ppk-readme:body:start -->
+<p>
+<a href="https://github.com/popovantondev/StudyArchivePrep"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/btn-source-ru-dark.0b8494cd.svg"><img src="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/btn-source-ru-light.caee542c.svg" width="146" height="36" alt="Исходники"></picture></a>
+<a href="https://popovantondev.github.io/StudyArchivePrep/index-ru.html"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/btn-website-ru-dark.01c04693.svg"><img src="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/btn-website-ru-light.4a775cb2.svg" width="92" height="36" alt="Сайт"></picture></a>
+<a href="https://popovantondev.github.io/StudyArchivePrep/Guide-ru.html"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/btn-guide-ru-dark.0e8dded2.svg"><img src="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/btn-guide-ru-light.8a718142.svg" width="161" height="36" alt="Руководство"></picture></a>
+<a href="https://github.com/popovantondev/StudyArchivePrep/issues/new/choose"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/btn-bug-ru-dark.503333a7.svg"><img src="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/btn-bug-ru-light.96e585db.svg" width="234" height="36" alt="Сообщить об ошибке"></picture></a>
+</p>
+
+<p><a href="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/images/study-archive-prep-workspace-ru.png"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/preview-ru-dark.e5f91e77.webp"><img src="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/preview-ru-light.8a8344c6.webp" width="880" height="516" alt="Интерфейс программы Study Archive Prep"></picture></a><br>
+<sub><a href="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/images/study-archive-prep-workspace-ru.png">Снимок целиком</a></sub></p>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/divider-dark.4fe89eda.svg"><img src="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/divider-light.db9fb42e.svg" width="880" height="6" alt="Разделитель"></picture>
+<!-- ppk-readme:body:end -->
 
 <!-- public-release:start -->
 Организует учебные материалы по датам, извлекает аудио и готовит порядок публикации для Telegram Media Sender.
@@ -17,10 +31,6 @@
 
 **Первые шаги:** Откройте руководство запуска из исходников. Программа сама не отправляет материалы в Telegram.
 <!-- public-release:end -->
-
-**[Сайт](https://popovantondev.github.io/StudyArchivePrep/index-ru.html)**
-
-![Скриншот синтетического примера в русскоязычном интерфейсе](docs/images/study-archive-prep-workspace-ru.png)
 
 Study Archive Prep раскладывает учебные материалы по датам, помогает проверить записи и субтитры и готовит порядок публикации для Telegram Media Sender.
 

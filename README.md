@@ -1,10 +1,24 @@
-<div align="center">
-  <img src="presentation-icon.svg" width="128" alt="Study Archive Prep Symbol">
-</div>
+<!-- ppk-readme:head:start -->
+<a href="https://popovantondev.github.io/StudyArchivePrep/index.html"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/header-de-dark.9ec6c581.svg"><img src="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/header-de-light.25a12b17.svg" width="880" height="188" alt="Study Archive Prep — Ordnet Lernmaterial nach Datum und extrahiert Audio. macOS 13+ · Apple Silicon, Nur Quellcode 0.1.0"></picture></a>
+<!-- ppk-readme:head:end -->
 
 # Study Archive Prep
 
 [Русский](README.ru.md) · **Deutsch** · [English](README.en.md)
+
+<!-- ppk-readme:body:start -->
+<p>
+<a href="https://github.com/popovantondev/StudyArchivePrep"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/btn-source-de-dark.f619e7cf.svg"><img src="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/btn-source-de-light.9d57ced8.svg" width="134" height="36" alt="Quellcode"></picture></a>
+<a href="https://popovantondev.github.io/StudyArchivePrep/index.html"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/btn-website-de-dark.d2be2680.svg"><img src="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/btn-website-de-light.79777de2.svg" width="129" height="36" alt="Webseite"></picture></a>
+<a href="https://popovantondev.github.io/StudyArchivePrep/Guide-de.html"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/btn-guide-de-dark.e75537d5.svg"><img src="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/btn-guide-de-light.c11c4a72.svg" width="134" height="36" alt="Anleitung"></picture></a>
+<a href="https://github.com/popovantondev/StudyArchivePrep/issues/new/choose"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/btn-bug-de-dark.180e5053.svg"><img src="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/btn-bug-de-light.67191c2b.svg" width="168" height="36" alt="Fehler melden"></picture></a>
+</p>
+
+<p><a href="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/images/study-archive-prep-workspace-de.png"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/preview-de-dark.5eca1ac8.webp"><img src="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/preview-de-light.d944f5b7.webp" width="880" height="516" alt="Oberfläche von Study Archive Prep"></picture></a><br>
+<sub><a href="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/images/study-archive-prep-workspace-de.png">Ganzer Screenshot</a></sub></p>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/divider-dark.4fe89eda.svg"><img src="https://raw.githubusercontent.com/popovantondev/StudyArchivePrep/main/docs/readme/divider-light.db9fb42e.svg" width="880" height="6" alt="Trennlinie"></picture>
+<!-- ppk-readme:body:end -->
 
 <!-- public-release:start -->
 Ordnet Lernmaterial nach Datum, extrahiert Audio und bereitet die Reihenfolge für Telegram Media Sender vor.
@@ -17,10 +31,6 @@ Ordnet Lernmaterial nach Datum, extrahiert Audio und bereitet die Reihenfolge f�
 
 **Erste Schritte:** Die Anleitung zum Start aus dem Quellcode lesen. Die App sendet selbst keine Materialien an Telegram.
 <!-- public-release:end -->
-
-**[Webseite](https://popovantondev.github.io/StudyArchivePrep/)**
-
-![Screenshot des synthetischen Beispiels in der deutschsprachigen Oberfläche](docs/images/study-archive-prep-workspace-de.png)
 
 Study Archive Prep ordnet Lernmaterial nach Datum, hilft bei der Prüfung von Aufnahmen und Untertiteln und erstellt einen Veröffentlichungsplan für Telegram Media Sender.
 
